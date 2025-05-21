@@ -9,6 +9,40 @@
 
 3. **Rebuild UI components using React and Chakra UI.**
    - Album list, album detail, reviews, etc.
+
+### Suggested Album Components
+
+#### Album List Components
+
+- **AlbumGrid.tsx** – Grid layout for displaying multiple albums.
+- **AlbumCard.tsx** – Individual card component for album previews in lists/grids. (Completed)
+- **AlbumListItem.tsx** – Alternative list view for albums.
+
+#### Album Detail Components
+
+- **AlbumHeader.tsx** – Shows album title, artist, year, and cover image.
+- **TrackList.tsx** – Displays the album's tracklist.
+- **AlbumInfo.tsx** – Shows genres, styles, and format information.
+- **AlbumCredits.tsx** – Displays artist credits and roles.
+
+#### Album Interaction Components
+
+- **AddToCollectionButton.tsx** – Button to add album to user's collection.
+- **AlbumActions.tsx** – Menu or button group for album-related actions.
+- **RatingDisplay.tsx** – Show/set album ratings.
+
+#### Album Search Components
+
+- **AlbumSearchBar.tsx** – Search input with filters for finding albums.
+- **SearchResults.tsx** – Display component for album search results.
+- **FilterControls.tsx** – Filters for year, format, genre, etc.
+
+#### Album Review Components
+
+- **ReviewList.tsx** – List of community reviews.
+- **ReviewCard.tsx** – Individual review display.
+- **ReviewForm.tsx** – Form for adding/editing reviews.
+
 4. **API Integration:**
    - Use Next.js API routes to proxy Discogs API calls (keeps keys safe, allows custom logic).
    - Example: `/pages/api/albums.ts` for album search/fetch.
