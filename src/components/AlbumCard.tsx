@@ -37,7 +37,7 @@ export const AlbumCard = ({
           {album.title}
         </Text>
         <Text mt="2">{album.artist}</Text>
-        {album.year !== null && (
+        {album.year && (
           <Text mt="2" color="gray.500" opacity=".8">
             {album.year}
           </Text>

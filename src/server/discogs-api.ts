@@ -26,7 +26,7 @@ export class DiscogsAPI {
   async searchAlbums(
     query: string,
     sort: string = "relevance",
-    perPage: number = 30
+    perPage: number = 500
   ): Promise<Album[]> {
     try {
       const searchResults = (await this.db.search({
@@ -37,17 +37,114 @@ export class DiscogsAPI {
         per_page: perPage,
       })) as unknown as SearchResponse;
 
-      return searchResults.results.map((result) => ({
-        id: result.id,
-        title:
-          result.title?.split(" - ").slice(1).join(" - ") || "Unknown Title",
-        artist:
-          result.artist || result.title?.split(" - ")[0] || "Unknown Artist",
-        year: result.year ? this.extractYearDigits(result.year) : undefined,
-        coverImageURL: result.cover_image,
-        format: result.format,
-        isMasterRelease: result.type === "master",
-      }));
+      // Group results by normalized artist-title combination
+      const groupedResults = searchResults.results.reduce((acc, result) => {
+        const title = (
+          result.title?.split(" - ").slice(1).join(" - ") || "Unknown Title"
+        ).toLowerCase();
+        const artist = (
+          result.artist ||
+          result.title?.split(" - ")[0] ||
+          "Unknown Artist"
+        ).toLowerCase();
+        const key = `${artist} - ${title}`;
+
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(result);
+        return acc;
+      }, {} as Record<string, typeof searchResults.results>);
+
+      const processedAlbums: Album[] = [];
+
+      // Process each group to find the best version
+      for (const results of Object.values(groupedResults)) {
+        if (results.length === 0) continue;
+
+        // Prefer specific releases over master releases
+        const specificReleases = results.filter(
+          (result) => result.type !== "master"
+        );
+
+        if (specificReleases.length > 0) {
+          // Sort by year to prefer older releases
+          const sortedReleases = specificReleases.sort((a, b) => {
+            const yearA = a.year
+              ? parseInt(this.extractYearDigits(a.year))
+              : Infinity;
+            const yearB = b.year
+              ? parseInt(this.extractYearDigits(b.year))
+              : Infinity;
+            return yearA - yearB;
+          });
+
+          const bestResult = sortedReleases[0];
+          processedAlbums.push({
+            id: bestResult.id,
+            title:
+              bestResult.title?.split(" - ").slice(1).join(" - ") ||
+              "Unknown Title",
+            artist:
+              bestResult.artist ||
+              bestResult.title?.split(" - ")[0] ||
+              "Unknown Artist",
+            year: bestResult.year
+              ? this.extractYearDigits(bestResult.year)
+              : undefined,
+            coverImageURL: bestResult.cover_image,
+            format: bestResult.format,
+            isMasterRelease: false,
+          });
+          continue;
+        }
+
+        // Fall back to master release if no specific releases
+        const masterReleases = results.filter(
+          (result) => result.type === "master"
+        );
+        if (masterReleases.length > 0) {
+          const bestResult = masterReleases[0];
+          processedAlbums.push({
+            id: bestResult.id,
+            title:
+              bestResult.title?.split(" - ").slice(1).join(" - ") ||
+              "Unknown Title",
+            artist:
+              bestResult.artist ||
+              bestResult.title?.split(" - ")[0] ||
+              "Unknown Artist",
+            year: bestResult.year
+              ? this.extractYearDigits(bestResult.year)
+              : undefined,
+            coverImageURL: bestResult.cover_image,
+            format: bestResult.format,
+            isMasterRelease: true,
+          });
+          continue;
+        }
+
+        // Final fallback: use the first result
+        const firstResult = results[0];
+        processedAlbums.push({
+          id: firstResult.id,
+          title:
+            firstResult.title?.split(" - ").slice(1).join(" - ") ||
+            "Unknown Title",
+          artist:
+            firstResult.artist ||
+            firstResult.title?.split(" - ")[0] ||
+            "Unknown Artist",
+          year: firstResult.year
+            ? this.extractYearDigits(firstResult.year)
+            : undefined,
+          coverImageURL: firstResult.cover_image,
+          format: firstResult.format,
+          isMasterRelease: firstResult.type === "master",
+        });
+      }
+
+      return processedAlbums;
     } catch (error) {
       if (error instanceof APIError) throw error;
       throw APIError.networkError(

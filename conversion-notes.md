@@ -14,9 +14,8 @@
 
 #### Album List Components
 
-- **AlbumGrid.tsx** – Grid layout for displaying multiple albums.
+- **AlbumGrid.tsx** – Grid layout for displaying multiple albums. (Completed)
 - **AlbumCard.tsx** – Individual card component for album previews in lists/grids. (Completed)
-- **AlbumListItem.tsx** – Alternative list view for albums.
 
 #### Album Detail Components
 

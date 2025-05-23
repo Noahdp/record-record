@@ -1,4 +1,4 @@
-import { Box } from "@chakra-ui/react";
+import { SimpleGrid } from "@chakra-ui/react";
 import { AlbumCard } from "./AlbumCard";
 import { Album } from "@/types/Album";
 import { useState, useEffect, useCallback } from "react";
@@ -28,7 +28,7 @@ export const AlbumGrid = ({ albums }: AlbumGridProps) => {
   }, [fetchCollectionStatus]);
 
   return (
-    <Box>
+    <SimpleGrid columns={[1, 2, 3, 4]} spacing={10}>
       {albums.map((album) => (
         <AlbumCard
           key={album.id}
@@ -37,6 +37,6 @@ export const AlbumGrid = ({ albums }: AlbumGridProps) => {
           onCollectionUpdate={() => fetchCollectionStatus()}
         />
       ))}
-    </Box>
+    </SimpleGrid>
   );
 };
