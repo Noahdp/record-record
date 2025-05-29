@@ -24,8 +24,8 @@ export const AlbumCard = ({
     try {
       await addToCollection(album);
       onCollectionUpdate?.();
-    } catch (error) {
-      console.error("Failed adding to Collection", error);
+    } catch {
+      // Silently handle collection errors - API will return proper error responses
     }
   };
 

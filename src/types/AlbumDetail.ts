@@ -8,7 +8,6 @@ export interface AlbumDetail {
   year?: string;
   coverImageURL?: string;
   format?: string[];
-  isMasterRelease?: boolean;
   genres?: string[];
   styles?: string[];
   tracklist: Track[];

@@ -18,8 +18,7 @@ export async function GET(
     });
 
     return NextResponse.json({ exists: !!album });
-  } catch (error) {
-    console.error("Failed to check collection status:", error);
+  } catch {
     return NextResponse.json(
       { error: "Failed to check collection status" },
       { status: 500 }

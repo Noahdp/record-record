@@ -16,13 +16,11 @@ export async function POST(request: Request) {
         format: Array.isArray(album.format)
           ? JSON.stringify(album.format)
           : null,
-        isMasterRelease: album.isMasterRelease,
       },
     });
 
     return NextResponse.json(result);
-  } catch (error) {
-    console.error("Failed to add to collection:", error);
+  } catch {
     return NextResponse.json(
       { error: "Failed to add to collection" },
       { status: 500 }
@@ -34,8 +32,7 @@ export async function GET() {
   try {
     const albums = await prisma.album.findMany();
     return NextResponse.json(albums);
-  } catch (error) {
-    console.error("Failed to fetch collection:", error);
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch collection" },
       { status: 500 }

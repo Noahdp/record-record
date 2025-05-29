@@ -42,8 +42,7 @@ export default function Home() {
         }
 
         setResults(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error("Search failed:", error);
+      } catch {
         setResults([]);
       }
       setLoading(false);

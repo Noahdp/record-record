@@ -5,5 +5,4 @@ export interface Album {
   year?: string;
   coverImageURL?: string;
   format?: string[];
-  isMasterRelease?: boolean;
 }

@@ -7,10 +7,7 @@ const discogsAPI = new DiscogsAPI(
   process.env.DISCOGS_CONSUMER_SECRET || ""
 );
 
-export async function GET(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET({ params }: { params: Promise<{ id: string }> }) {
   const { id: idString } = await params;
   const id = parseInt(idString);
 
@@ -29,8 +26,6 @@ export async function GET(
       reviews,
     });
   } catch (error) {
-    console.error("Error fetching album details:", error);
-
     if (error instanceof APIError) {
       return NextResponse.json(
         { error: error.message },
