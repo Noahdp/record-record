@@ -2,23 +2,30 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter,
+  Heading,
   Image,
+  Stack,
+  HStack,
   Text,
+  ButtonGroup,
 } from "@chakra-ui/react";
 import { Album } from "@/types/Album";
-import { addToCollection } from "@/lib/db/collection";
+import { addToCollection, removeFromCollection } from "@/lib/db/collection";
+import { IoMdAdd } from "react-icons/io";
+import { TfiViewListAlt } from "react-icons/tfi";
 
 interface AlbumCardProps {
   album: Album;
   inCollection: boolean;
   onCollectionUpdate?: () => void;
+  showDeleteButton?: boolean;
 }
 
 export const AlbumCard = ({
   album,
   inCollection,
   onCollectionUpdate,
+  showDeleteButton = false,
 }: AlbumCardProps) => {
   const handleAddToCollection = async () => {
     try {
@@ -29,28 +36,51 @@ export const AlbumCard = ({
     }
   };
 
+  const handleRemoveFromCollection = async () => {
+    try {
+      await removeFromCollection(album.id);
+      onCollectionUpdate?.();
+    } catch {
+      // Silently handle collection errors - API will return proper error responses
+    }
+  };
+
   return (
     <Card maxW="sm" overflow="hidden">
       <Image src={album.coverImageURL} alt={`${album.title} album cover`} />
       <CardBody gap="2">
-        <Text as="h3" fontWeight="bold" fontSize="lg">
-          {album.title}
-        </Text>
-        <Text mt="2">{album.artist}</Text>
-        {album.year && (
-          <Text mt="2" color="gray.500" opacity=".8">
-            {album.year}
-          </Text>
-        )}
+        <Stack spacing="2">
+          <Heading size="md">{album.title}</Heading>
+          <HStack>
+            <Text fontSize="large">{album.artist}</Text>
+            {album.year && (
+              <Text fontSize="small" color="gray.500" opacity=".8">
+                {album.year}
+              </Text>
+            )}
+          </HStack>
+          <ButtonGroup variant="outline" spacing="2">
+            {!inCollection ? (
+              <Button
+                leftIcon={<IoMdAdd />}
+                colorScheme="green"
+                onClick={handleAddToCollection}
+              >
+                Add
+              </Button>
+            ) : showDeleteButton ? (
+              <Button
+                variant="outline"
+                colorScheme="red"
+                onClick={handleRemoveFromCollection}
+              >
+                Delete
+              </Button>
+            ) : null}
+            <Button leftIcon={<TfiViewListAlt />}>Details</Button>
+          </ButtonGroup>
+        </Stack>
       </CardBody>
-      <CardFooter gap="2">
-        {!inCollection && (
-          <Button variant="solid" onClick={handleAddToCollection}>
-            Add
-          </Button>
-        )}
-        <Button variant="ghost">Details</Button>
-      </CardFooter>
     </Card>
   );
 };

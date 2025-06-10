@@ -21,50 +21,6 @@ export class DiscogsAPI {
     this.db = client.database();
   }
 
-  private extractYearDigits(dateString: string): string {
-    const yearPattern = /\b(19|20)\d{2}\b/;
-    const match = dateString.match(yearPattern);
-    return match ? match[0] : dateString;
-  }
-
-  private handleError(error: unknown): never {
-    if (error instanceof APIError) throw error;
-    throw APIError.networkError(
-      error instanceof Error ? error.message : "Unknown error"
-    );
-  }
-
-  private createAlbumFromResult(result: DiscogsSearchResult): Album {
-    const titleParts = result.title?.split(" - ") || ["", "Unknown Title"];
-    const title =
-      titleParts.length > 1
-        ? titleParts.slice(1).join(" - ")
-        : titleParts[0] || "Unknown Title";
-    const artist = result.artist || titleParts[0] || "Unknown Artist";
-
-    return {
-      id: result.id,
-      title,
-      artist,
-      year: result.year ? this.extractYearDigits(result.year) : undefined,
-      coverImageURL: result.cover_image,
-      format: result.format,
-    };
-  }
-
-  private findBestResult(results: DiscogsSearchResult[]): DiscogsSearchResult {
-    // Sort all results by year and return the oldest entry
-    return results.sort((a, b) => {
-      const yearA = a.year
-        ? parseInt(this.extractYearDigits(a.year))
-        : Infinity;
-      const yearB = b.year
-        ? parseInt(this.extractYearDigits(b.year))
-        : Infinity;
-      return yearA - yearB;
-    })[0];
-  }
-
   async searchAlbums(
     query: string,
     sort: string = "relevance",
@@ -101,12 +57,54 @@ export class DiscogsAPI {
 
       return Object.values(groupedResults)
         .filter((results) => results.length > 0)
-        .map((results) =>
-          this.createAlbumFromResult(this.findBestResult(results))
-        );
+        .map((results) => this.createBestAlbumFromResults(results));
     } catch (error) {
       this.handleError(error);
     }
+  }
+
+  private createBestAlbumFromResults(results: DiscogsSearchResult[]): Album {
+    // Find the best result (oldest by year) and create album
+    const bestResult = results.sort((a, b) => {
+      const yearA = a.year
+        ? parseInt(this.extractYearDigits(a.year))
+        : Infinity;
+      const yearB = b.year
+        ? parseInt(this.extractYearDigits(b.year))
+        : Infinity;
+      return yearA - yearB;
+    })[0];
+
+    const titleParts = bestResult.title?.split(" - ") || ["", "Unknown Title"];
+    const title =
+      titleParts.length > 1
+        ? titleParts.slice(1).join(" - ")
+        : titleParts[0] || "Unknown Title";
+    const artist = bestResult.artist || titleParts[0] || "Unknown Artist";
+
+    return {
+      id: bestResult.id,
+      title,
+      artist,
+      year: bestResult.year
+        ? this.extractYearDigits(bestResult.year)
+        : undefined,
+      coverImageURL: bestResult.cover_image,
+      format: bestResult.format,
+    };
+  }
+
+  private extractYearDigits(dateString: string): string {
+    const yearPattern = /\b(19|20)\d{2}\b/;
+    const match = dateString.match(yearPattern);
+    return match ? match[0] : dateString;
+  }
+
+  private handleError(error: unknown): never {
+    if (error instanceof APIError) throw error;
+    throw APIError.networkError(
+      error instanceof Error ? error.message : "Unknown error"
+    );
   }
 
   async getBestAlbumDetails(id: number): Promise<AlbumDetail> {

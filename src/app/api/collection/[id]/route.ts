@@ -25,3 +25,35 @@ export async function GET(
     );
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id: idString } = await params;
+    const id = parseInt(idString);
+    if (isNaN(id)) {
+      return NextResponse.json({ error: "Invalid ID format" }, { status: 400 });
+    }
+
+    const album = await prisma.album.findUnique({
+      where: { id },
+    });
+
+    if (!album) {
+      return NextResponse.json({ error: "Album not found" }, { status: 404 });
+    }
+
+    await prisma.album.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ message: "Album deleted successfully" });
+  } catch {
+    return NextResponse.json(
+      { error: "Failed to delete album from collection" },
+      { status: 500 }
+    );
+  }
+}

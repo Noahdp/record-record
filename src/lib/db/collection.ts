@@ -40,3 +40,19 @@ export async function isInCollection(id: number): Promise<boolean> {
     return false;
   }
 }
+
+export async function removeFromCollection(id: number): Promise<boolean> {
+  try {
+    const response = await fetch(`/api/collection/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to remove from collection");
+    }
+
+    return true;
+  } catch {
+    throw new Error("Failed to remove from collection");
+  }
+}

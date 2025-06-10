@@ -6,9 +6,11 @@ import { isInCollection } from "@/lib/db/collection";
 
 interface AlbumGridProps {
   albums: Album[];
+  onCollectionUpdate?: () => void;
+  showDeleteButton?: boolean;
 }
 
-export const AlbumGrid = ({ albums }: AlbumGridProps) => {
+export const AlbumGrid = ({ albums, onCollectionUpdate, showDeleteButton = false }: AlbumGridProps) => {
   const [collectionIds, setCollectionIds] = useState<Set<string>>(new Set());
 
   const fetchCollectionStatus = useCallback(async () => {
@@ -23,18 +25,27 @@ export const AlbumGrid = ({ albums }: AlbumGridProps) => {
     setCollectionIds(ids);
   }, [albums]);
 
+  const handleCollectionUpdate = useCallback(() => {
+    fetchCollectionStatus();
+    onCollectionUpdate?.();
+  }, [fetchCollectionStatus, onCollectionUpdate]);
+
   useEffect(() => {
     fetchCollectionStatus();
   }, [fetchCollectionStatus]);
 
   return (
-    <SimpleGrid columns={[1, 2, 3, 4]} spacing={10}>
+    <SimpleGrid
+      spacing={4}
+      templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+    >
       {albums.map((album) => (
         <AlbumCard
           key={album.id}
           album={album}
           inCollection={collectionIds.has(album.id.toString())}
-          onCollectionUpdate={() => fetchCollectionStatus()}
+          onCollectionUpdate={handleCollectionUpdate}
+          showDeleteButton={showDeleteButton}
         />
       ))}
     </SimpleGrid>

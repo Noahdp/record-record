@@ -22,22 +22,23 @@ export default function Home() {
   const [filteredResults, setFilteredResults] = useState<Album[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Load collection function
+  const loadCollection = async () => {
+    try {
+      const albums = await getCollection();
+      setCollection(albums);
+      setFilteredResults(albums);
+    } catch (error) {
+      console.error("Failed to load collection:", error);
+      setCollection([]);
+      setFilteredResults([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Load collection on page initialization
   useEffect(() => {
-    const loadCollection = async () => {
-      try {
-        const albums = await getCollection();
-        setCollection(albums);
-        setFilteredResults(albums);
-      } catch (error) {
-        console.error("Failed to load collection:", error);
-        setCollection([]);
-        setFilteredResults([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadCollection();
   }, []);
 
@@ -88,7 +89,11 @@ export default function Home() {
 
         {filteredResults.length > 0 && !loading && (
           <Box mt={6} width="100%">
-            <AlbumGrid albums={filteredResults} />
+            <AlbumGrid
+              albums={filteredResults}
+              onCollectionUpdate={loadCollection}
+              showDeleteButton={true}
+            />
           </Box>
         )}
 
