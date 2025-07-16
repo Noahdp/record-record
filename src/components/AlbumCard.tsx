@@ -19,6 +19,8 @@ interface AlbumCardProps {
   inCollection: boolean;
   onCollectionUpdate?: () => void;
   showDeleteButton?: boolean;
+  onShowDetails?: () => void;
+  isSelected?: boolean;
 }
 
 export const AlbumCard = ({
@@ -26,6 +28,8 @@ export const AlbumCard = ({
   inCollection,
   onCollectionUpdate,
   showDeleteButton = false,
+  onShowDetails,
+  isSelected = false,
 }: AlbumCardProps) => {
   const handleAddToCollection = async () => {
     try {
@@ -46,7 +50,12 @@ export const AlbumCard = ({
   };
 
   return (
-    <Card maxW="sm" overflow="hidden">
+    <Card
+      maxW="sm"
+      overflow="hidden"
+      border={isSelected ? "2px solid #3182ce" : undefined}
+      boxShadow={isSelected ? "0 0 0 2px #3182ce" : undefined}
+    >
       <Image src={album.coverImageURL} alt={`${album.title} album cover`} />
       <CardBody gap="2">
         <Stack spacing="2">
@@ -77,7 +86,7 @@ export const AlbumCard = ({
                 Delete
               </Button>
             ) : null}
-            <Button leftIcon={<TfiViewListAlt />}>Details</Button>
+            <Button leftIcon={<TfiViewListAlt />} onClick={onShowDetails}>Details</Button>
           </ButtonGroup>
         </Stack>
       </CardBody>

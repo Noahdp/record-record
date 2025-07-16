@@ -3,6 +3,17 @@ import { AlbumCard } from "./AlbumCard";
 import { Album } from "@/types/Album";
 import { useState, useEffect, useCallback } from "react";
 import { isInCollection } from "@/lib/db/collection";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
+import { AlbumDetailCard } from "./AlbumDetailCard";
+import { AlbumDetail } from "@/types/AlbumDetail";
+import { Text } from "@chakra-ui/react";
 
 interface AlbumGridProps {
   albums: Album[];
@@ -10,8 +21,16 @@ interface AlbumGridProps {
   showDeleteButton?: boolean;
 }
 
-export const AlbumGrid = ({ albums, onCollectionUpdate, showDeleteButton = false }: AlbumGridProps) => {
+export const AlbumGrid = ({
+  albums,
+  onCollectionUpdate,
+  showDeleteButton = false,
+}: AlbumGridProps) => {
   const [collectionIds, setCollectionIds] = useState<Set<string>>(new Set());
+  const [selectedAlbumId, setSelectedAlbumId] = useState<number | null>(null);
+  const [albumDetail, setAlbumDetail] = useState<AlbumDetail | null>(null);
+  const [loadingDetail, setLoadingDetail] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const fetchCollectionStatus = useCallback(async () => {
     const statuses = await Promise.all(
@@ -30,24 +49,66 @@ export const AlbumGrid = ({ albums, onCollectionUpdate, showDeleteButton = false
     onCollectionUpdate?.();
   }, [fetchCollectionStatus, onCollectionUpdate]);
 
+  const handleShowDetails = async (albumId: number) => {
+    setSelectedAlbumId(albumId);
+    setAlbumDetail(null); // Clear previous album data
+    setLoadingDetail(true);
+    onOpen();
+    try {
+      const res = await fetch(`/api/discogs/${albumId}`);
+      const data = await res.json();
+      setAlbumDetail(data);
+    } catch (error) {
+      console.error("Error fetching album details:", error);
+      setAlbumDetail(null);
+    } finally {
+      setLoadingDetail(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    onClose();
+    setAlbumDetail(null);
+    setSelectedAlbumId(null);
+  };
+
   useEffect(() => {
     fetchCollectionStatus();
   }, [fetchCollectionStatus]);
 
   return (
-    <SimpleGrid
-      spacing={4}
-      templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
-    >
-      {albums.map((album) => (
-        <AlbumCard
-          key={album.id}
-          album={album}
-          inCollection={collectionIds.has(album.id.toString())}
-          onCollectionUpdate={handleCollectionUpdate}
-          showDeleteButton={showDeleteButton}
-        />
-      ))}
-    </SimpleGrid>
+    <>
+      <SimpleGrid
+        spacing={4}
+        templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+      >
+        {albums.map((album) => (
+          <AlbumCard
+            key={album.id}
+            album={album}
+            inCollection={collectionIds.has(album.id.toString())}
+            onCollectionUpdate={handleCollectionUpdate}
+            showDeleteButton={showDeleteButton}
+            onShowDetails={() => handleShowDetails(album.id)}
+            isSelected={selectedAlbumId === album.id}
+          />
+        ))}
+      </SimpleGrid>
+      <Modal isOpen={isOpen} onClose={handleCloseModal} size="xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody>
+            {loadingDetail ? (
+              <Text>Loading...</Text>
+            ) : albumDetail ? (
+              <AlbumDetailCard album={albumDetail} />
+            ) : (
+              <Text>Failed to load album details.</Text>
+            )}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
   );
 };

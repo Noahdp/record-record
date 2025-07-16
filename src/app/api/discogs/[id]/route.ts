@@ -7,7 +7,7 @@ const discogsAPI = new DiscogsAPI(
   process.env.DISCOGS_CONSUMER_SECRET || ""
 );
 
-export async function GET({ params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id: idString } = await params;
   const id = parseInt(idString);
 
