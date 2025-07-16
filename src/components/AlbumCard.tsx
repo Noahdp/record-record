@@ -56,7 +56,9 @@ export const AlbumCard = ({
       border={isSelected ? "2px solid #3182ce" : undefined}
       boxShadow={isSelected ? "0 0 0 2px #3182ce" : undefined}
     >
-      <Image src={album.coverImageURL} alt={`${album.title} album cover`} />
+      {album.coverImageURL && (
+        <Image src={album.coverImageURL} alt={`${album.title} album cover`} />
+      )}
       <CardBody gap="2">
         <Stack spacing="2">
           <Heading size="md">{album.title}</Heading>
@@ -86,7 +88,9 @@ export const AlbumCard = ({
                 Delete
               </Button>
             ) : null}
-            <Button leftIcon={<TfiViewListAlt />} onClick={onShowDetails}>Details</Button>
+            <Button leftIcon={<TfiViewListAlt />} onClick={onShowDetails}>
+              Details
+            </Button>
           </ButtonGroup>
         </Stack>
       </CardBody>

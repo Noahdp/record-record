@@ -10,6 +10,8 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Spinner,
+  Flex,
 } from "@chakra-ui/react";
 import { AlbumDetailCard } from "./AlbumDetailCard";
 import { AlbumDetail } from "@/types/AlbumDetail";
@@ -100,7 +102,15 @@ export const AlbumGrid = ({
           <ModalCloseButton />
           <ModalBody>
             {loadingDetail ? (
-              <Text>Loading...</Text>
+              <Flex justify="center" align="center" py={8}>
+                <Spinner
+                  thickness="4px"
+                  speed="0.65s"
+                  emptyColor="gray.200"
+                  color="green.500"
+                  size="xl"
+                />
+              </Flex>
             ) : albumDetail ? (
               <AlbumDetailCard album={albumDetail} />
             ) : (

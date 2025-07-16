@@ -29,7 +29,7 @@ export class DiscogsAPI {
     try {
       const searchResults = (await this.db.search({
         query,
-        type: "master,release",
+        type: "release",
         format: "album",
         sort,
         per_page: perPage,
@@ -64,7 +64,6 @@ export class DiscogsAPI {
   }
 
   private createBestAlbumFromResults(results: DiscogsSearchResult[]): Album {
-    // Find the best result (oldest by year) and create album
     const bestResult = results.sort((a, b) => {
       const yearA = a.year
         ? parseInt(this.extractYearDigits(a.year))
@@ -82,16 +81,21 @@ export class DiscogsAPI {
         : titleParts[0] || "Unknown Title";
     const artist = bestResult.artist || titleParts[0] || "Unknown Artist";
 
-    return {
+    const album: Album = {
       id: bestResult.id,
       title,
       artist,
       year: bestResult.year
         ? this.extractYearDigits(bestResult.year)
         : undefined,
-      coverImageURL: bestResult.cover_image,
       format: bestResult.format,
     };
+
+    if (bestResult.cover_image) {
+      album.coverImageURL = bestResult.cover_image;
+    }
+
+    return album;
   }
 
   private extractYearDigits(dateString: string): string {
@@ -113,7 +117,20 @@ export class DiscogsAPI {
       if (!release) {
         throw APIError.httpError(404);
       }
-      return release as AlbumDetail;
+      const coverImageURL = release.images?.[0]?.uri || "";
+      return {
+        id: release.id,
+        title: release.title,
+        artist: release.artist || "",
+        year: release.year,
+        coverImageURL,
+        format: release.format || [],
+        genres: release.genres || [],
+        styles: release.styles || [],
+        tracklist: release.tracklist || [],
+        credits: release.credits || [],
+        description: release.description || "",
+      } as AlbumDetail;
     } catch (error) {
       this.handleError(error);
     }

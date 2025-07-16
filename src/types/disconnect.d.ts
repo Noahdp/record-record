@@ -30,10 +30,26 @@ declare module "disconnect" {
     artist?: string;
     master_id?: number;
     master_url?: string;
-    cover_image?: string;
+    images?: Array<{ uri: string; type?: string }>;
+    cover_image?: string; // Re-add for search results
     year?: string;
     format?: string[];
     type?: string;
+    genres?: string[];
+    styles?: string[];
+
+    tracklist?: Array<{
+      position?: string;
+      title: string;
+      duration?: string;
+    }>;
+
+    credits?: Array<{
+      name: string;
+      role?: string;
+    }>;
+
+    description?: string;
   }
 
   interface DiscogsSearchResult extends DiscogsRelease {
