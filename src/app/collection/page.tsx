@@ -86,7 +86,6 @@ export default function Home() {
         </Flex>
 
         {loading && <Spinner color="green" mt={4} />}
-
         {filteredResults.length > 0 && !loading && (
           <Box mt={6} width="100%">
             <AlbumGrid

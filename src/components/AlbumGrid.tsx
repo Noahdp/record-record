@@ -57,9 +57,22 @@ export const AlbumGrid = ({
     setLoadingDetail(true);
     onOpen();
     try {
-      const res = await fetch(`/api/discogs/${albumId}`);
-      const data = await res.json();
-      setAlbumDetail(data);
+      // Fetch album details and reviews in parallel
+      const [albumRes, reviewsRes] = await Promise.all([
+        fetch(`/api/discogs/${albumId}`),
+        fetch(`/api/discogs/${albumId}/reviews`),
+      ]);
+
+      const albumData = await albumRes.json();
+      const reviewsData = await reviewsRes.json();
+
+      // Combine album data with reviews
+      const albumWithReviews = {
+        ...albumData,
+        reviews: reviewsData,
+      };
+
+      setAlbumDetail(albumWithReviews);
     } catch (error) {
       console.error("Error fetching album details:", error);
       setAlbumDetail(null);
@@ -96,11 +109,18 @@ export const AlbumGrid = ({
           />
         ))}
       </SimpleGrid>
-      <Modal isOpen={isOpen} onClose={handleCloseModal} size="xl">
+      <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered>
         <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-          <ModalBody>
+        <ModalContent
+          maxW="1200px"
+          h="85vh"
+          mx={4}
+          bg="white"
+          display="flex"
+          flexDirection="column"
+        >
+          <ModalCloseButton zIndex={10} top={4} right={4} size="md" />
+          <ModalBody p={8} pt={12} overflowY="auto" flex="1">
             {loadingDetail ? (
               <Flex justify="center" align="center" py={8}>
                 <Spinner

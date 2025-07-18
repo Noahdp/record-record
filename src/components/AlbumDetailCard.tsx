@@ -1,122 +1,73 @@
-import {
-  Box,
-  Card,
-  CardBody,
-  Heading,
-  Image,
-  Stack,
-  HStack,
-  Text,
-  Tag,
-  VStack,
-  List,
-  ListItem,
-  Divider,
-} from "@chakra-ui/react";
+import { Box, Card, CardBody, HStack, VStack, Divider } from "@chakra-ui/react";
 import { AlbumDetail } from "@/types/AlbumDetail";
-import { Track } from "@/types/Track";
-import { ArtistCredit } from "@/types/ArtistCredit";
+import { AlbumArtwork } from "./AlbumArtwork";
+import { AlbumMetadata } from "./AlbumMetadata";
+import { AlbumDescription } from "./AlbumDescription";
+import { Tracklist } from "./Tracklist";
+import { Credits } from "./Credits";
+import { ReviewSection } from "./ReviewSection";
 
 interface AlbumDetailCardProps {
   album: AlbumDetail;
 }
 
 export const AlbumDetailCard = ({ album }: AlbumDetailCardProps) => {
-  const renderTagList = (label: string, items: string[]) => (
-    <HStack>
-      <Text fontWeight="semibold">{label}:</Text>
-      {items.map((item, index) => (
-        <Tag key={`${label.toLowerCase()}-${index}`}>{item}</Tag>
-      ))}
-    </HStack>
-  );
-
-  const renderTrack = (track: Track, idx: number) => (
-    <ListItem key={track.position || idx}>
-      {track.position && (
-        <Text as="span" fontWeight="bold">
-          {track.position}.{" "}
-        </Text>
-      )}
-      <Text as="span">{track.title}</Text>
-      {track.duration && (
-        <Text as="span" color="gray.500" ml={2} fontSize="sm">
-          {track.duration}
-        </Text>
-      )}
-    </ListItem>
-  );
-
-  const renderCredit = (credit: ArtistCredit, idx: number) => (
-    <ListItem key={idx}>
-      <Text as="span" fontWeight="bold">
-        {credit.name}
-      </Text>
-      {credit.role && (
-        <Text as="span" color="gray.500" ml={2} fontSize="sm">
-          {credit.role}
-        </Text>
-      )}
-    </ListItem>
-  );
-
   return (
-    <Card maxW="lg" overflow="hidden">
-      {album.coverImageURL && (
-        <Image src={album.coverImageURL} alt={`${album.title} album cover`} />
-      )}
-
-      <CardBody>
-        <Stack spacing={4}>
-          {/* Header */}
-          <Heading size="lg">{album.title}</Heading>
-          <HStack>
-            <Text fontSize="xl" fontWeight="bold">
-              {album.artist}
-            </Text>
-            {album.year && (
-              <Text fontSize="md" color="gray.500" opacity={0.8}>
-                {album.year}
-              </Text>
-            )}
-          </HStack>
-
-          {/* Metadata */}
-          {album.format &&
-            album.format.length > 0 &&
-            renderTagList("Format", album.format)}
-          {album.genres &&
-            album.genres.length > 0 &&
-            renderTagList("Genres", album.genres)}
-          {album.styles &&
-            album.styles.length > 0 &&
-            renderTagList("Styles", album.styles)}
-
-          {/* Description */}
-          {album.description && (
-            <Box>
-              <Text fontWeight="semibold">Description:</Text>
-              <Text>{album.description}</Text>
-            </Box>
-          )}
-
-          <Divider />
-
-          {/* Tracklist */}
-          <VStack align="start" spacing={2}>
-            <Text fontWeight="semibold">Tracklist:</Text>
-            <List spacing={1}>{album.tracklist.map(renderTrack)}</List>
-          </VStack>
-
-          {/* Credits */}
-          {album.credits && album.credits.length > 0 && (
-            <VStack align="start" spacing={2}>
-              <Text fontWeight="semibold">Credits:</Text>
-              <List spacing={1}>{album.credits.map(renderCredit)}</List>
+    <Box
+      maxW="none"
+      w="full"
+      minW="950px"
+      position="relative"
+      display="flex"
+      justifyContent="center"
+      alignItems="start"
+    >
+      <Card
+        bg="gray.50"
+        _dark={{ bg: "gray.900", borderColor: "gray.700" }}
+        shadow="2xl"
+        borderRadius="xl"
+        border="1px solid"
+        borderColor="gray.200"
+        w="full"
+        maxW="1000px"
+      >
+        <CardBody p={8}>
+          <HStack spacing={8} align="start">
+            {/* Left Column - Album Art and Metadata */}
+            <VStack spacing={4} minW="300px" flexShrink={0}>
+              <AlbumArtwork album={album} />
+              <AlbumMetadata album={album} />
             </VStack>
-          )}
-        </Stack>
-      </CardBody>
-    </Card>
+
+            {/* Right Column - Content */}
+            <VStack
+              flex={1}
+              align="start"
+              spacing={6}
+              overflow="hidden"
+              minH={0}
+            >
+              {album.description && (
+                <AlbumDescription description={album.description} />
+              )}
+              {album.tracklist && <Tracklist tracks={album.tracklist} />}
+              {album.credits && <Credits credits={album.credits} />}
+
+              {/* Reviews Section */}
+              {(album.reviews || album.communityRating) && (
+                <Box w="full" minH={0} overflow="hidden">
+                  <Divider mb={4} />
+                  <ReviewSection
+                    reviews={album.reviews || []}
+                    communityRating={album.communityRating}
+                  />
+                </Box>
+              )}
+            </VStack>
+          </HStack>
+        </CardBody>
+      </Card>
+    </Box>
   );
 };

@@ -31,17 +31,42 @@ declare module "disconnect" {
     master_id?: number;
     master_url?: string;
     images?: Array<{ uri: string; type?: string }>;
-    cover_image?: string; // Re-add for search results
+    cover_image?: string;
     year?: string;
     format?: string[];
     type?: string;
     genres?: string[];
     styles?: string[];
+    community?: {
+      rating?: {
+        count: number;
+        average: number;
+      };
+    };
 
     tracklist?: Array<{
       position?: string;
       title: string;
       duration?: string;
+      extraartists?: Array<{
+        name: string;
+        role?: string;
+        id?: number;
+        anv?: string;
+        join?: string;
+        tracks?: string;
+        resource_url?: string;
+      }>;
+    }>;
+
+    extraartists?: Array<{
+      name: string;
+      role?: string;
+      id?: number;
+      anv?: string;
+      join?: string;
+      tracks?: string;
+      resource_url?: string;
     }>;
 
     credits?: Array<{

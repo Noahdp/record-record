@@ -1,7 +1,6 @@
 import { Client } from "disconnect";
 import { Album } from "../types/Album";
 import { AlbumDetail } from "../types/AlbumDetail";
-import { CommunityReview } from "../types/CommunityReview";
 import { APIError } from "./api-error";
 import type {
   SearchResponse,
@@ -117,7 +116,34 @@ export class DiscogsAPI {
       if (!release) {
         throw APIError.httpError(404);
       }
+
       const coverImageURL = release.images?.[0]?.uri || "";
+
+      // Map extraartists to credits with proper ArtistCredit structure
+      const credits = (release.extraartists || []).map((artist) => ({
+        name: artist.name,
+        role: artist.role || undefined,
+      }));
+
+      // Map tracklist with proper Track structure including extraartists
+      const tracklist = (release.tracklist || []).map((track) => ({
+        position: track.position,
+        title: track.title,
+        duration: track.duration,
+        artists: (track.extraartists || []).map((artist) => ({
+          name: artist.name,
+          role: artist.role || undefined,
+        })),
+      }));
+
+      // Extract community rating from release data
+      const communityRating = release.community?.rating
+        ? {
+            average: release.community.rating.average,
+            count: release.community.rating.count,
+          }
+        : undefined;
+
       return {
         id: release.id,
         title: release.title,
@@ -127,36 +153,11 @@ export class DiscogsAPI {
         format: release.format || [],
         genres: release.genres || [],
         styles: release.styles || [],
-        tracklist: release.tracklist || [],
-        credits: release.credits || [],
+        tracklist,
+        credits,
         description: release.description || "",
+        communityRating,
       } as AlbumDetail;
-    } catch (error) {
-      this.handleError(error);
-    }
-  }
-
-  async getAlbumReviews(id: number): Promise<CommunityReview[]> {
-    try {
-      const response = await fetch(
-        `https://api.discogs.com/releases/${id}/reviews`,
-        {
-          headers: {
-            "User-Agent": "Record Record/1.0",
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw APIError.httpError(response.status);
-      }
-
-      const data = await response.json();
-      if (!data.results) {
-        throw APIError.invalidResponse();
-      }
-
-      return data.results;
     } catch (error) {
       this.handleError(error);
     }

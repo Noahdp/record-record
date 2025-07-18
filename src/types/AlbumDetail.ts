@@ -1,5 +1,6 @@
 import { Track } from "./Track";
 import { ArtistCredit } from "./ArtistCredit";
+import { CommunityReview } from "./CommunityReview";
 
 export interface AlbumDetail {
   id: number;
@@ -13,4 +14,9 @@ export interface AlbumDetail {
   tracklist: Track[];
   credits?: ArtistCredit[];
   description?: string;
+  reviews?: CommunityReview[];
+  communityRating?: {
+    average: number;
+    count: number;
+  };
 }
