@@ -1,7 +1,19 @@
 {
   "name": "record-record",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "A modern vinyl record collection manager built with Next.js and integrated with the Discogs API",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Noahdp/record-record.git"
+  },
+  "author": "Noah Pate",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Noahdp/record-record/issues"
+  },
+  "homepage": "https://github.com/Noahdp/record-record#readme",
+  "keywords": ["nextjs", "react", "typescript", "vinyl", "discogs", "music", "collection-manager"],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
