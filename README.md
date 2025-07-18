@@ -1,6 +1,6 @@
 # Record Record
 
-A modern web application for managing your vinyl record collection, built with Next.js and integrated with the Discogs API.
+A modern web application for managing your vinyl record collection, built with Next.js and integrated with the Discogs API. Mainly built as a learning excercise both to get more React experience and see what its like working with an AI agent for boilerplate code and config.
 
 ## Features
 
