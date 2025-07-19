@@ -13,7 +13,15 @@
     "url": "https://github.com/Noahdp/record-record/issues"
   },
   "homepage": "https://github.com/Noahdp/record-record#readme",
-  "keywords": ["nextjs", "react", "typescript", "vinyl", "discogs", "music", "collection-manager"],
+  "keywords": [
+    "nextjs",
+    "react",
+    "typescript",
+    "vinyl",
+    "discogs",
+    "music",
+    "collection-manager"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -21,6 +29,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.2.4",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -29,7 +38,7 @@
     "next": "15.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-icons": "^5.5.0"
+    "react-icons": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

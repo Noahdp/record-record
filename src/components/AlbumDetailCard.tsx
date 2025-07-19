@@ -1,4 +1,5 @@
-import { Box, Card, CardBody, HStack, VStack, Divider } from "@chakra-ui/react";
+import { Box, Card, CardBody, VStack, Divider } from "@chakra-ui/react";
+import { motion } from "framer-motion";
 import { AlbumDetail } from "@/types/AlbumDetail";
 import { AlbumArtwork } from "./AlbumArtwork";
 import { AlbumMetadata } from "./AlbumMetadata";
@@ -7,67 +8,125 @@ import { Tracklist } from "./Tracklist";
 import { Credits } from "./Credits";
 import { ReviewSection } from "./ReviewSection";
 
+const MotionBox = motion(Box);
+const MotionCard = motion(Card);
+
 interface AlbumDetailCardProps {
   album: AlbumDetail;
 }
 
 export const AlbumDetailCard = ({ album }: AlbumDetailCardProps) => {
+  const containerVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: "easeOut" },
+    },
+  };
+
   return (
-    <Box
+    <MotionBox
       maxW="none"
       w="full"
-      minW="950px"
+      minW={["320px", "950px"]}
       position="relative"
       display="flex"
       justifyContent="center"
       alignItems="start"
+      p={[4, 8]}
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
     >
-      <Card
-        bg="gray.50"
-        _dark={{ bg: "gray.900", borderColor: "gray.700" }}
-        shadow="2xl"
-        borderRadius="xl"
+      <MotionCard
+        bg="white"
+        _dark={{ bg: "gray.800", borderColor: "gray.700" }}
+        shadow="xl"
+        borderRadius="2xl"
         border="1px solid"
-        borderColor="gray.200"
+        borderColor="gray.100"
         w="full"
-        maxW="1000px"
+        maxW="1200px"
+        overflow="hidden"
+        variants={itemVariants}
       >
-        <CardBody p={8}>
-          <HStack spacing={8} align="start">
-            {/* Left Column - Album Art and Metadata */}
-            <VStack spacing={4} minW="300px" flexShrink={0}>
-              <AlbumArtwork album={album} />
-              <AlbumMetadata album={album} />
-            </VStack>
-
-            {/* Right Column - Content */}
-            <VStack
-              flex={1}
-              align="start"
-              spacing={6}
-              overflow="hidden"
-              minH={0}
+        <CardBody p={[6, 10]}>
+          <VStack spacing={[6, 8]} align="stretch">
+            {/* Mobile: Stack vertically, Desktop: Side by side */}
+            <Box
+              display="flex"
+              flexDirection={["column", "column", "row"]}
+              gap={[6, 8]}
+              alignItems="flex-start"
             >
-              {album.description && (
-                <AlbumDescription description={album.description} />
-              )}
-              {album.tracklist && <Tracklist tracks={album.tracklist} />}
-              {album.credits && <Credits credits={album.credits} />}
+              {/* Left Column - Album Art and Metadata */}
+              <MotionBox
+                minW={["full", "350px"]}
+                maxW={["full", "350px"]}
+                flexShrink={0}
+                variants={itemVariants}
+              >
+                <VStack spacing={6}>
+                  <AlbumArtwork album={album} />
+                  <AlbumMetadata album={album} />
+                </VStack>
+              </MotionBox>
 
-              {/* Reviews Section */}
-              {(album.reviews || album.communityRating) && (
-                <Box w="full" minH={0} overflow="hidden">
-                  <Divider mb={4} />
-                  <ReviewSection
-                    reviews={album.reviews || []}
-                    communityRating={album.communityRating}
-                  />
-                </Box>
-              )}
-            </VStack>
-          </HStack>
+              {/* Right Column - Content */}
+              <MotionBox flex={1} minH={0} w="full" variants={itemVariants}>
+                <VStack spacing={8} align="start" w="full">
+                  {album.description && (
+                    <MotionBox w="full" variants={itemVariants}>
+                      <AlbumDescription description={album.description} />
+                    </MotionBox>
+                  )}
+
+                  {album.tracklist && (
+                    <MotionBox w="full" variants={itemVariants}>
+                      <Tracklist tracks={album.tracklist} />
+                    </MotionBox>
+                  )}
+
+                  {album.credits && (
+                    <MotionBox w="full" variants={itemVariants}>
+                      <Credits credits={album.credits} />
+                    </MotionBox>
+                  )}
+                </VStack>
+              </MotionBox>
+            </Box>
+
+            {/* Reviews Section - Full Width */}
+            {(album.reviews || album.communityRating) && (
+              <MotionBox w="full" variants={itemVariants}>
+                <Divider
+                  mb={6}
+                  borderColor="gray.200"
+                  _dark={{ borderColor: "gray.600" }}
+                />
+                <ReviewSection
+                  reviews={album.reviews || []}
+                  communityRating={album.communityRating}
+                />
+              </MotionBox>
+            )}
+          </VStack>
         </CardBody>
-      </Card>
-    </Box>
+      </MotionCard>
+    </MotionBox>
   );
 };

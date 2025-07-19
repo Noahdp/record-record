@@ -94,8 +94,10 @@ export const AlbumGrid = ({
   return (
     <>
       <SimpleGrid
-        spacing={4}
-        templateColumns="repeat(auto-fill, minmax(250px, 1fr))"
+        spacing={6}
+        templateColumns="repeat(auto-fill, minmax(280px, 1fr))"
+        w="100%"
+        minChildWidth="280px"
       >
         {albums.map((album) => (
           <AlbumCard
