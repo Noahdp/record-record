@@ -1,7 +1,7 @@
 import { Box, Card, CardBody, VStack, Divider } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { AlbumDetail } from "@/types/AlbumDetail";
-import { AlbumArtwork } from "./AlbumArtwork";
+import { AlbumDetailHeader } from "./AlbumDetailHeader";
 import { AlbumMetadata } from "./AlbumMetadata";
 import { AlbumDescription } from "./AlbumDescription";
 import { Tracklist } from "./Tracklist";
@@ -81,7 +81,7 @@ export const AlbumDetailCard = ({ album }: AlbumDetailCardProps) => {
                 variants={itemVariants}
               >
                 <VStack spacing={6}>
-                  <AlbumArtwork album={album} />
+                  <AlbumDetailHeader album={album} />
                   <AlbumMetadata album={album} />
                 </VStack>
               </MotionBox>

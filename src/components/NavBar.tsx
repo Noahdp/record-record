@@ -73,7 +73,7 @@ const NavItem = ({
   );
 };
 
-export const Navigation = () => {
+export const NavBar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const pathname = usePathname();
 
@@ -138,7 +138,7 @@ export const Navigation = () => {
             <IconButton
               size="md"
               icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-              aria-label="Toggle Navigation"
+              aria-label="Toggle NavBar"
               display={{ base: "flex", md: "none" }}
               onClick={onToggle}
               variant="ghost"
