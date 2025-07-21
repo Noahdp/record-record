@@ -293,6 +293,7 @@ export default function CollectionPage() {
                     albums={filteredResults}
                     onCollectionUpdate={loadCollection}
                     showDeleteButton={true}
+                    showInCollectionBadge={false}
                   />
                 </VStack>
               </MotionBox>

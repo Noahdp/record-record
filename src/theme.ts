@@ -1,7 +1,7 @@
 import { extendTheme } from "@chakra-ui/react";
 
 // Modern color palette with phthalo green as primary
-const phthaloGreen = {
+const brandGreen = {
   50: "#e8f5ec",
   100: "#d0ead8",
   200: "#a1d5b1",
@@ -12,6 +12,20 @@ const phthaloGreen = {
   700: "#185539",
   800: "#10412c",
   900: "#082d1f",
+};
+
+// Brand red color palette
+const brandRed = {
+  50: "#fef2f2",
+  100: "#fee2e2",
+  200: "#fecaca",
+  300: "#fca5a5",
+  400: "#E91E63",
+  500: "#DC2626",
+  600: "#dc2626",
+  700: "#b91c1c",
+  800: "#991b1b",
+  900: "#7f1d1d",
 };
 
 // Modern neutral grays for better contrast
@@ -30,11 +44,12 @@ const modernGray = {
 
 const theme = extendTheme({
   colors: {
-    phthalo: phthaloGreen,
-    green: phthaloGreen,
-    blue: phthaloGreen,
+    phthalo: brandGreen,
+    green: brandGreen,
+    blue: brandGreen,
     gray: modernGray,
-    brand: phthaloGreen,
+    brand: brandGreen,
+    red: brandRed,
   },
   fonts: {
     heading: `-apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"`,

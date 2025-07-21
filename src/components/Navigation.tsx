@@ -14,12 +14,9 @@ import {
   HStack,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import {
-  HamburgerIcon,
-  CloseIcon,
-  ViewIcon,
-  SearchIcon,
-} from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
+import { FcMusic } from "react-icons/fc";
+import { FaRecordVinyl } from "react-icons/fa";
 import { useRouter, usePathname } from "next/navigation";
 
 const MotionBox = motion(Box);
@@ -79,18 +76,17 @@ const NavItem = ({
 export const Navigation = () => {
   const { isOpen, onToggle } = useDisclosure();
   const pathname = usePathname();
-  const router = useRouter();
 
   const navigationItems = [
     {
       label: "Home",
       href: "/",
-      icon: SearchIcon,
+      icon: () => <SearchIcon boxSize={5} />,
     },
     {
       label: "Collection",
       href: "/collection",
-      icon: ViewIcon,
+      icon: () => <FcMusic size={20} />,
     },
   ];
   return (
@@ -111,26 +107,19 @@ export const Navigation = () => {
         <Container maxW="container.xl">
           <Flex minH="16" py={2} align="center" justify="space-between">
             {/* Logo */}
-            <MotionBox whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Flex
-                align="center"
-                gap={3}
-                cursor="pointer"
-                onClick={() => router.push("/")}
+            <Flex align="center" gap={3}>
+              <Box p={2} bg="red.400" borderRadius="lg" color="white">
+                <FaRecordVinyl size={32} />
+              </Box>
+              <Text
+                fontSize="xl"
+                fontWeight="bold"
+                color={useColorModeValue("gray.800", "white")}
+                display={["none", "block"]}
               >
-                <Box p={2} bg="brand.500" borderRadius="lg" color="white">
-                  <Text fontSize="24px">🎵</Text>
-                </Box>
-                <Text
-                  fontSize="xl"
-                  fontWeight="bold"
-                  color={useColorModeValue("gray.800", "white")}
-                  display={["none", "block"]}
-                >
-                  Record Record
-                </Text>
-              </Flex>
-            </MotionBox>
+                Record Record
+              </Text>
+            </Flex>
 
             {/* Desktop Navigation */}
             <HStack spacing={6} display={{ base: "none", md: "flex" }}>

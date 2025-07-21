@@ -10,7 +10,8 @@ import {
   Box,
   Badge,
 } from "@chakra-ui/react";
-import { AddIcon, ViewIcon, DeleteIcon } from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import { FaThList } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Album } from "@/types/Album";
 import { addToCollection, removeFromCollection } from "@/lib/db/collection";
@@ -27,6 +28,7 @@ interface AlbumCardProps {
   showDeleteButton?: boolean;
   onShowDetails?: () => void;
   isSelected?: boolean;
+  showInCollectionBadge?: boolean;
 }
 
 export const AlbumCard = memo(
@@ -37,6 +39,7 @@ export const AlbumCard = memo(
     showDeleteButton = false,
     onShowDetails,
     isSelected = false,
+    showInCollectionBadge = true,
   }: AlbumCardProps) => {
     const handleAddToCollection = async () => {
       try {
@@ -82,12 +85,7 @@ export const AlbumCard = memo(
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.2 }}
       >
-        <MotionBox
-          position="relative"
-          overflow="hidden"
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.3 }}
-        >
+        <MotionBox position="relative" overflow="hidden">
           {album.coverImageURL && (
             <OptimizedImage
               src={album.coverImageURL}
@@ -98,7 +96,7 @@ export const AlbumCard = memo(
               fallbackSrc="/api/placeholder/300/300"
             />
           )}
-          {inCollection && (
+          {inCollection && showInCollectionBadge && (
             <Badge
               position="absolute"
               top="3"
@@ -115,8 +113,8 @@ export const AlbumCard = memo(
           )}
         </MotionBox>
 
-        <CardBody p="6">
-          <Stack spacing="4">
+        <CardBody p="4">
+          <Stack spacing="5">
             <Box>
               <Heading
                 size="md"
@@ -151,52 +149,58 @@ export const AlbumCard = memo(
               </HStack>
             </Box>
 
-            <ButtonGroup variant="outline" spacing="3" size="sm">
-              {!inCollection ? (
+            <Box display="flex" justifyContent="flex-end">
+              <ButtonGroup variant="outline" spacing="3" size="sm">
+                {!inCollection ? (
+                  <Button
+                    leftIcon={<AddIcon />}
+                    colorScheme="brand"
+                    variant="solid"
+                    onClick={handleAddToCollection}
+                    aria-label={`Add ${album.title} to collection`}
+                    _hover={{
+                      transform: "translateY(-1px)",
+                      boxShadow: "md",
+                    }}
+                  >
+                    Add
+                  </Button>
+                ) : showDeleteButton ? (
+                  <Button
+                    leftIcon={<DeleteIcon />}
+                    variant="outline"
+                    colorScheme="red"
+                    onClick={handleRemoveFromCollection}
+                    aria-label={`Remove ${album.title} from collection`}
+                    _hover={{
+                      bg: "red.50",
+                      borderColor: "red.300",
+                      transform: "translateY(-1px)",
+                    }}
+                  >
+                    Remove
+                  </Button>
+                ) : null}
                 <Button
-                  leftIcon={<AddIcon />}
-                  colorScheme="brand"
-                  variant="solid"
-                  onClick={handleAddToCollection}
-                  aria-label={`Add ${album.title} to collection`}
-                  _hover={{
-                    transform: "translateY(-1px)",
-                    boxShadow: "md",
-                  }}
-                >
-                  Add
-                </Button>
-              ) : showDeleteButton ? (
-                <Button
-                  leftIcon={<DeleteIcon />}
+                  leftIcon={
+                    <Box color="green.600">
+                      <FaThList />
+                    </Box>
+                  }
+                  onClick={onShowDetails}
                   variant="outline"
-                  colorScheme="red"
-                  onClick={handleRemoveFromCollection}
-                  aria-label={`Remove ${album.title} from collection`}
+                  colorScheme="gray"
+                  aria-label={`View details for ${album.title}`}
                   _hover={{
-                    bg: "red.50",
-                    borderColor: "red.300",
+                    bg: "gray.50",
+                    borderColor: "gray.300",
                     transform: "translateY(-1px)",
                   }}
                 >
-                  Remove
+                  Details
                 </Button>
-              ) : null}
-              <Button
-                leftIcon={<ViewIcon />}
-                onClick={onShowDetails}
-                variant="outline"
-                colorScheme="gray"
-                aria-label={`View details for ${album.title}`}
-                _hover={{
-                  bg: "gray.50",
-                  borderColor: "gray.300",
-                  transform: "translateY(-1px)",
-                }}
-              >
-                Details
-              </Button>
-            </ButtonGroup>
+              </ButtonGroup>
+            </Box>
           </Stack>
         </CardBody>
       </MotionCard>

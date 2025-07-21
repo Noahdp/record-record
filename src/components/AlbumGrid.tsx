@@ -21,12 +21,14 @@ interface AlbumGridProps {
   albums: Album[];
   onCollectionUpdate?: () => void;
   showDeleteButton?: boolean;
+  showInCollectionBadge?: boolean;
 }
 
 export const AlbumGrid = ({
   albums,
   onCollectionUpdate,
   showDeleteButton = false,
+  showInCollectionBadge = true,
 }: AlbumGridProps) => {
   const [collectionIds, setCollectionIds] = useState<Set<string>>(new Set());
   const [selectedAlbumId, setSelectedAlbumId] = useState<number | null>(null);
@@ -108,6 +110,7 @@ export const AlbumGrid = ({
             showDeleteButton={showDeleteButton}
             onShowDetails={() => handleShowDetails(album.id)}
             isSelected={selectedAlbumId === album.id}
+            showInCollectionBadge={showInCollectionBadge}
           />
         ))}
       </SimpleGrid>
