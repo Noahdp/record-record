@@ -62,10 +62,14 @@ export function getStarConfiguration(
 
   for (let i = 1; i <= maxStars; i++) {
     if (rating >= i) {
+      // Full star if rating is at or above this star position
       stars.push("filled");
-    } else if (rating >= i - 0.5) {
+    } else if (rating >= i - 0.5 && rating % 1 >= 0.5) {
+      // Half star if rating is between (star position - 0.5) and star position,
+      // and the decimal portion is 0.5 or higher
       stars.push("half");
     } else {
+      // Empty star otherwise
       stars.push("empty");
     }
   }

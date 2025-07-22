@@ -10,10 +10,10 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Spinner,
   Flex,
 } from "@chakra-ui/react";
 import { AlbumDetailCard } from "./AlbumDetailCard";
+import { VinylSpinner } from "./VinylSpinner";
 import { Text } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { modalEntrance } from "@/utils/animationUtils";
@@ -93,7 +93,10 @@ export const AlbumGrid = ({
           maxW="1200px"
           h="85vh"
           mx={4}
-          bg="white"
+          bgGradient="linear(135deg, green.50, gray.50, white)"
+          _dark={{
+            bgGradient: "linear(135deg, green.900, gray.800, gray.900)",
+          }}
           display="flex"
           flexDirection="column"
           variants={modalVariants}
@@ -105,7 +108,7 @@ export const AlbumGrid = ({
           <ModalBody p={8} pt={12} overflowY="auto" flex="1">
             {loadingDetail ? (
               <Flex justify="center" align="center" py={8}>
-                <Spinner
+                <VinylSpinner
                   thickness="4px"
                   speed="0.65s"
                   emptyColor="gray.200"

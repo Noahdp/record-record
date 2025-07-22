@@ -1,5 +1,5 @@
 import { Box, VStack, HStack, Text, Divider, Badge } from "@chakra-ui/react";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { CommunityReview } from "@/types/CommunityReview";
 import { formatReviewDate } from "@/utils/dateUtils";
 import { getRatingColor, getStarConfiguration } from "@/utils/ratingUtils";
@@ -21,19 +21,13 @@ export const ReviewSection = ({
 
     return (
       <HStack spacing={1}>
-        {starConfig.map((starType, index) => (
-          <FaStar
-            key={index}
-            size={16}
-            color={
-              starType === "filled"
-                ? getRatingColor(rating)
-                : starType === "half"
-                ? getRatingColor(rating)
-                : "#E2E8F0"
-            }
-          />
-        ))}
+        {starConfig.map((starType, index) => {
+          const StarIcon = starType === "half" ? FaStarHalfAlt : FaStar;
+          const color =
+            starType === "empty" ? "#E2E8F0" : getRatingColor(rating);
+
+          return <StarIcon key={index} size={16} color={color} />;
+        })}
       </HStack>
     );
   };
@@ -57,7 +51,7 @@ export const ReviewSection = ({
               Community Rating
             </Text>
             <HStack spacing={3}>
-              {renderStars(Math.round(communityRating.average))}
+              {renderStars(Math.round(communityRating.average * 10) / 10)}
               <Badge colorScheme="blue" variant="solid">
                 {communityRating.average.toFixed(1)}/5
               </Badge>

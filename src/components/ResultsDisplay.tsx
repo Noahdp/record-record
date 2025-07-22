@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
-import { Box, Heading, Button, Text, Spinner, VStack } from "@chakra-ui/react";
+import { Box, Heading, Button, Text, VStack } from "@chakra-ui/react";
 import { motion, Variants } from "framer-motion";
 import { Album } from "@/types/Album";
 import { AlbumGrid } from "@/components/AlbumGrid";
+import { VinylSpinner } from "@/components/VinylSpinner";
 import { useAppColors } from "@/hooks/useAppColors";
 
 const MotionBox = motion(Box);
@@ -56,7 +57,7 @@ export const ResultsDisplay = React.memo(
       return (
         <MotionBox variants={variants} textAlign="center" py={10}>
           <VStack spacing={4}>
-            <Spinner color="brand.500" size="xl" thickness="3px" />
+            <VinylSpinner color="brand.500" size="xl" thickness="3px" />
             <Text color={textColor} fontSize="lg">
               {loadingText}
             </Text>

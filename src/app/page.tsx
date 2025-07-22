@@ -57,10 +57,7 @@ export default function HomePage() {
     >
       <NavBar />
 
-      <Box
-        minH="100vh"
-        bgGradient={bgGradient}
-      >
+      <Box minH="100vh" bgGradient={bgGradient}>
         <Container maxW="container.xl" py={[8, 16]}>
           {/* Hero Section */}
           <MotionBox
@@ -68,71 +65,82 @@ export default function HomePage() {
             animate="visible"
             variants={containerVariants}
           >
-            <VStack spacing={8} align="center" justify="center" minH="60vh" p={8}>
-            <motion.div variants={containerVariants}>
-              <Heading as="h1" size="2xl" textAlign="center" color={headingColor}>
-                Welcome to Record Record
-              </Heading>
-            </motion.div>
+            <VStack
+              spacing={8}
+              align="center"
+              justify="center"
+              minH="60vh"
+              p={8}
+            >
+              <motion.div variants={containerVariants}>
+                <Heading
+                  as="h1"
+                  size="2xl"
+                  textAlign="center"
+                  color={headingColor}
+                >
+                  Welcome to Record Record
+                </Heading>
+              </motion.div>
 
-            <motion.div variants={containerVariants}>
-              <Text
-                fontSize="xl"
-                color={textColor}
-                textAlign="center"
-                maxW="600px"
-              >
-                Your digital vinyl collection manager. Discover, track, and
-                organize your music collection with ease.
-              </Text>
-            </motion.div>
+              <motion.div variants={containerVariants}>
+                <Text
+                  fontSize="xl"
+                  color={textColor}
+                  textAlign="center"
+                  maxW="600px"
+                >
+                  Your digital vinyl collection manager. Discover, track, and
+                  organize your music collection with ease.
+                </Text>
+              </motion.div>
 
-            {/* Search Bar */}
-            <Box w="100%" maxW="500px">
-              <MotionBox
-                variants={searchBoxVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <SearchInput
-                  searchValue={searchQuery}
-                  onSearchChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder="Search for albums, artists, or songs..."
-                  showButton={true}
-                  buttonText="Search"
-                  buttonColorScheme="green"
-                  onButtonClick={handleSearch}
-                  isLoading={isSearching}
-                  loadingText="Search"
-                  maxWidth="500px"
+              {/* Search Bar */}
+              <Box w="100%" maxW="500px">
+                <MotionBox
+                  variants={searchBoxVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <SearchInput
+                    searchValue={searchQuery}
+                    onSearchChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Search for albums, artists, or songs..."
+                    showButton={true}
+                    buttonText="Search"
+                    buttonColorScheme="green"
+                    onButtonClick={handleSearch}
+                    isLoading={isSearching}
+                    loadingText="Search"
+                    maxWidth="500px"
+                  />
+                </MotionBox>
+              </Box>
+            </VStack>
+          </MotionBox>
+
+          {/* Search Results Section */}
+          {hasSearched && (
+            <Box py={16}>
+              <Container maxW="container.xl">
+                <ResultsDisplay
+                  loading={isSearching}
+                  results={searchResults}
+                  searchQuery={lastSearchedQuery}
+                  hasSearched={hasSearched}
+                  onCollectionUpdate={() => {
+                    console.log("Collection updated from search results");
+                  }}
+                  onClearResults={clearResults}
+                  showDeleteButton={false}
+                  showInCollectionBadge={true}
+                  loadingText="Searching..."
+                  emptyStateDescription="Try searching with different keywords or check your spelling."
                 />
-              </MotionBox>
+              </Container>
             </Box>
-          </VStack>
-        </MotionBox>
-
-        {/* Search Results Section */}
-        {hasSearched && (
-          <Box py={16}>
-            <Container maxW="container.xl">
-              <ResultsDisplay
-                loading={isSearching}
-                results={searchResults}
-                searchQuery={lastSearchedQuery}
-                hasSearched={hasSearched}
-                onCollectionUpdate={() => {
-                  console.log("Collection updated from search results");
-                }}
-                onClearResults={clearResults}
-                showDeleteButton={false}
-                showInCollectionBadge={true}
-                loadingText="Searching..."
-                emptyStateDescription="Try searching with different keywords or check your spelling."
-              />
-            </Container>
-          </Box>
-        )}
+          )}
         </Container>
       </Box>
     </motion.div>
