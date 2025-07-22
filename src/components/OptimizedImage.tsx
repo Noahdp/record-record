@@ -1,7 +1,8 @@
 "use client";
 
 import { Image as ChakraImage, ImageProps, Skeleton } from "@chakra-ui/react";
-import { useState, memo } from "react";
+import { memo } from "react";
+import { useImageLoading } from "@/hooks/useImageLoading";
 
 interface OptimizedImageProps extends Omit<ImageProps, "loading"> {
   src: string;
@@ -18,17 +19,7 @@ export const OptimizedImage = memo(
     enableLazyLoading = true,
     ...props
   }: OptimizedImageProps) => {
-    const [isLoaded, setIsLoaded] = useState(false);
-    const [hasError, setHasError] = useState(false);
-
-    const handleLoad = () => {
-      setIsLoaded(true);
-    };
-
-    const handleError = () => {
-      setHasError(true);
-      setIsLoaded(true);
-    };
+    const { isLoaded, hasError, handleLoad, handleError } = useImageLoading();
 
     return (
       <>

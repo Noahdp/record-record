@@ -1,5 +1,6 @@
 import { VStack, Image, Heading, HStack, Text } from "@chakra-ui/react";
 import { AlbumDetail } from "@/types/AlbumDetail";
+import { formatAlbumReleaseDate } from "@/utils/dateUtils";
 
 interface AlbumDetailHeaderProps {
   album: AlbumDetail;
@@ -35,7 +36,7 @@ export const AlbumDetailHeader = ({ album }: AlbumDetailHeaderProps) => {
           </Text>
           {album.year && (
             <Text fontSize="lg" color="gray.500" fontWeight="medium">
-              ({album.year})
+              ({formatAlbumReleaseDate(album.year)})
             </Text>
           )}
         </HStack>

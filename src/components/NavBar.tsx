@@ -9,7 +9,6 @@ import {
   Stack,
   Collapse,
   useDisclosure,
-  useColorModeValue,
   Container,
   HStack,
 } from "@chakra-ui/react";
@@ -18,6 +17,7 @@ import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { FcMusic } from "react-icons/fc";
 import { FaRecordVinyl } from "react-icons/fa";
 import { useRouter, usePathname } from "next/navigation";
+import { useAppColors } from "@/hooks/useAppColors";
 
 const MotionBox = motion(Box);
 
@@ -77,6 +77,9 @@ export const NavBar = () => {
   const { isOpen, onToggle } = useDisclosure();
   const pathname = usePathname();
 
+  // Use centralized color values
+  const { navBg, navBorderColor, headingColor } = useAppColors();
+
   const navigationItems = [
     {
       label: "Home",
@@ -96,9 +99,9 @@ export const NavBar = () => {
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
       <Box
-        bg={useColorModeValue("white", "gray.800")}
+        bg={navBg}
         borderBottom="1px"
-        borderColor={useColorModeValue("gray.100", "gray.700")}
+        borderColor={navBorderColor}
         boxShadow="sm"
         position="sticky"
         top={0}
@@ -114,7 +117,7 @@ export const NavBar = () => {
               <Text
                 fontSize="xl"
                 fontWeight="bold"
-                color={useColorModeValue("gray.800", "white")}
+                color={headingColor}
                 display={["none", "block"]}
               >
                 Record Record

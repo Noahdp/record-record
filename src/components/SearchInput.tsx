@@ -8,10 +8,10 @@ import {
   InputLeftElement,
   Button,
   HStack,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { motion, Variants } from "framer-motion";
+import { useAppColors } from "@/hooks/useAppColors";
 
 const MotionBox = motion(Box);
 
@@ -47,10 +47,8 @@ export const SearchInput = React.memo(
     variants,
     size = "lg",
   }: SearchInputProps) => {
-    // Color mode values
-    const inputBg = useColorModeValue("white", "gray.700");
-    const inputBorderColor = useColorModeValue("gray.200", "gray.600");
-    const inputHoverBorderColor = useColorModeValue("gray.300", "gray.500");
+    // Use centralized color values
+    const { inputBg, inputBorderColor, inputHoverBorderColor } = useAppColors();
 
     const content = showButton ? (
       <HStack spacing={2} w="full">

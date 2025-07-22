@@ -1,18 +1,11 @@
 "use client";
 
 import React from "react";
-import {
-  Box,
-  Heading,
-  Button,
-  Text,
-  Spinner,
-  VStack,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Heading, Button, Text, Spinner, VStack } from "@chakra-ui/react";
 import { motion, Variants } from "framer-motion";
 import { Album } from "@/types/Album";
 import { AlbumGrid } from "@/components/AlbumGrid";
+import { useAppColors } from "@/hooks/useAppColors";
 
 const MotionBox = motion(Box);
 
@@ -55,8 +48,8 @@ export const ResultsDisplay = React.memo(
     emptyStateDescription = "Try adjusting your search criteria.",
     emptyStateAction,
   }: ResultsDisplayProps) => {
-    const headingColor = useColorModeValue("gray.800", "white");
-    const textColor = useColorModeValue("gray.600", "gray.300");
+    // Use centralized color values
+    const { headingColor, textColor } = useAppColors();
 
     // Loading State
     if (loading) {

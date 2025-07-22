@@ -8,7 +8,7 @@ import {
   Collapse,
 } from "@chakra-ui/react";
 import { ArtistCredit } from "@/types/ArtistCredit";
-import { useState } from "react";
+import { useToggle } from "@/hooks/useToggle";
 import { IoChevronDown, IoChevronUp } from "react-icons/io5";
 
 interface CreditsProps {
@@ -16,7 +16,7 @@ interface CreditsProps {
 }
 
 export const Credits = ({ credits }: CreditsProps) => {
-  const [showCredits, setShowCredits] = useState(false);
+  const { isOpen: showCredits, toggle: toggleCredits } = useToggle();
 
   if (!credits || credits.length === 0) return null;
 
@@ -48,7 +48,7 @@ export const Credits = ({ credits }: CreditsProps) => {
           size="sm"
           variant="ghost"
           colorScheme="blue"
-          onClick={() => setShowCredits(!showCredits)}
+          onClick={toggleCredits}
           rightIcon={showCredits ? <IoChevronUp /> : <IoChevronDown />}
         >
           {showCredits ? "Hide" : "Show"} ({credits.length})

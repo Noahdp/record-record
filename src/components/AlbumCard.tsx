@@ -17,6 +17,8 @@ import { Album } from "@/types/Album";
 import { addToCollection, removeFromCollection } from "@/lib/db/collection";
 import { OptimizedImage } from "./OptimizedImage";
 import { memo } from "react";
+import { cardHover } from "@/utils/animationUtils";
+import { formatAlbumReleaseDate } from "@/utils/dateUtils";
 
 const MotionCard = motion(Card);
 const MotionBox = motion(Box);
@@ -77,12 +79,9 @@ export const AlbumCard = memo(
         }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        whileHover={{
-          y: -4,
-          boxShadow: "xl",
-          transition: { duration: 0.2 },
-        }}
-        whileTap={{ scale: 0.98 }}
+        variants={cardHover()}
+        whileHover="hover"
+        whileTap="tap"
         transition={{ duration: 0.2 }}
       >
         <MotionBox position="relative" overflow="hidden">
@@ -143,7 +142,7 @@ export const AlbumCard = memo(
                     fontWeight="medium"
                     _dark={{ color: "gray.400" }}
                   >
-                    {album.year}
+                    {formatAlbumReleaseDate(album.year)}
                   </Text>
                 )}
               </HStack>

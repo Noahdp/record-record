@@ -7,6 +7,7 @@ import { AlbumDescription } from "./AlbumDescription";
 import { Tracklist } from "./Tracklist";
 import { Credits } from "./Credits";
 import { ReviewSection } from "./ReviewSection";
+import { slideIn, staggerChildren, cardHover } from "@/utils/animationUtils";
 
 const MotionBox = motion(Box);
 const MotionCard = motion(Card);
@@ -16,27 +17,9 @@ interface AlbumDetailCardProps {
 }
 
 export const AlbumDetailCard = ({ album }: AlbumDetailCardProps) => {
-  const containerVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut",
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4, ease: "easeOut" },
-    },
-  };
+  const containerVariants = staggerChildren(0.1, 0.6);
+  const itemVariants = slideIn("bottom", 20, 0, 0.4);
+  const hoverVariants = cardHover(-2, 1.02);
 
   return (
     <MotionBox
@@ -62,7 +45,9 @@ export const AlbumDetailCard = ({ album }: AlbumDetailCardProps) => {
         w="full"
         maxW="1200px"
         overflow="hidden"
-        variants={itemVariants}
+        variants={{ ...itemVariants, ...hoverVariants }}
+        whileHover="hover"
+        whileTap="tap"
       >
         <CardBody p={[6, 10]}>
           <VStack spacing={[6, 8]} align="stretch">

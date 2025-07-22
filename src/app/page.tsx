@@ -2,11 +2,15 @@
 
 import { VStack, Text, Heading, Box, Container } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useState } from "react";
 import dynamic from "next/dynamic";
-import { Album } from "@/types/Album";
 import { SearchInput } from "@/components/SearchInput";
 import { ResultsDisplay } from "@/components/ResultsDisplay";
+import { useSearch } from "@/hooks/useSearch";
+import {
+  pageTransition,
+  fadeInScale,
+  staggerChildren,
+} from "@/utils/animationUtils";
 
 // Dynamically import NavBar with SSR disabled to avoid hydration issues
 const NavBar = dynamic(
@@ -22,77 +26,65 @@ const NavBar = dynamic(
 const MotionBox = motion.div;
 
 export default function HomePage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<Album[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
-  const [lastSearchedQuery, setLastSearchedQuery] = useState("");
+  const {
+    searchQuery,
+    searchResults,
+    isSearching,
+    hasSearched,
+    lastSearchedQuery,
+    setSearchQuery,
+    handleSearch,
+    handleKeyPress,
+    clearResults,
+  } = useSearch();
 
-  // Gets search results from discogs API
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
+  // Animation variants
+  const containerVariants = staggerChildren(0.1, 0.8);
+  const searchBoxVariants = fadeInScale(0.4, 0.4);
+  const pageVariants = pageTransition("vertical");
 
-    setIsSearching(true);
-    setHasSearched(true);
-    setLastSearchedQuery(searchQuery);
-
-    try {
-      const response = await fetch(
-        `/api/discogs/search?q=${encodeURIComponent(searchQuery)}`
-      );
-
-      if (response.ok) {
-        const albums = await response.json();
-        setSearchResults(albums);
-      } else {
-        console.error("Search failed");
-        setSearchResults([]);
-      }
-    } catch (error) {
-      console.error("Search error:", error);
-      setSearchResults([]);
-    } finally {
-      setIsSearching(false);
-    }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
-  };
   return (
-    <>
+    <motion.div
+      initial="initial"
+      animate="in"
+      exit="out"
+      variants={pageVariants}
+      transition={{ duration: 0.6 }}
+    >
       <NavBar />
 
       <Container maxW="container.xl" p={0}>
         {/* Hero Section */}
         <MotionBox
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
         >
           <VStack spacing={8} align="center" justify="center" minH="60vh" p={8}>
-            <Heading as="h1" size="2xl" textAlign="center" color="gray.800">
-              Welcome to Record Record
-            </Heading>
+            <motion.div variants={containerVariants}>
+              <Heading as="h1" size="2xl" textAlign="center" color="gray.800">
+                Welcome to Record Record
+              </Heading>
+            </motion.div>
 
-            <Text
-              fontSize="xl"
-              color="gray.600"
-              textAlign="center"
-              maxW="600px"
-            >
-              Your digital vinyl collection manager. Discover, track, and
-              organize your music collection with ease.
-            </Text>
+            <motion.div variants={containerVariants}>
+              <Text
+                fontSize="xl"
+                color="gray.600"
+                textAlign="center"
+                maxW="600px"
+              >
+                Your digital vinyl collection manager. Discover, track, and
+                organize your music collection with ease.
+              </Text>
+            </motion.div>
 
             {/* Search Bar */}
             <Box w="100%" maxW="500px">
               <MotionBox
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.4 }}
+                variants={searchBoxVariants}
+                initial="hidden"
+                animate="visible"
               >
                 <SearchInput
                   searchValue={searchQuery}
@@ -124,12 +116,7 @@ export default function HomePage() {
                 onCollectionUpdate={() => {
                   console.log("Collection updated from search results");
                 }}
-                onClearResults={() => {
-                  setSearchQuery("");
-                  setSearchResults([]);
-                  setHasSearched(false);
-                  setLastSearchedQuery("");
-                }}
+                onClearResults={clearResults}
                 showDeleteButton={false}
                 showInCollectionBadge={true}
                 loadingText="Searching..."
@@ -139,6 +126,6 @@ export default function HomePage() {
           </Box>
         )}
       </Container>
-    </>
+    </motion.div>
   );
 }

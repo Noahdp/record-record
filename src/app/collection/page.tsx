@@ -1,22 +1,19 @@
 "use client";
 
 import { CollectionStats } from "@/components/CollectionStats";
+import { CollectionAnalytics } from "@/components/CollectionAnalytics";
 import { SearchInput } from "@/components/SearchInput";
 import { ResultsDisplay } from "@/components/ResultsDisplay";
+import { useCollection } from "@/hooks/useCollection";
+import { useAppColors } from "@/hooks/useAppColors";
+import { filterAlbumsMultiTerm } from "@/utils/filterAlbums";
 import dynamic from "next/dynamic";
-import {
-  Box,
-  Heading,
-  Text,
-  Container,
-  VStack,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Heading, Text, Container, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
+import React from "react";
 import { Album } from "@/types/Album";
-import { getCollection } from "@/lib/db/collection";
 
 // Dynamically import NavBar with SSR disabled to avoid hydration issues
 const NavBar = dynamic(
@@ -35,56 +32,32 @@ const MotionVStack = motion(VStack);
 export default function CollectionPage() {
   const router = useRouter();
   const [searchValue, setSearchValue] = useState("");
-  const [collection, setCollection] = useState<Album[]>([]);
   const [filteredResults, setFilteredResults] = useState<Album[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  // Color mode values
-  const bgGradient = useColorModeValue(
-    "linear(to-br, white, gray.50, green.50)",
-    "linear(to-br, gray.900, gray.800, green.900)"
-  );
-  const headingColor = useColorModeValue("gray.800", "white");
-  const textColor = useColorModeValue("gray.600", "gray.300");
+  // Use custom collection hook
+  const { collection, loading, refreshCollection } = useCollection();
 
-  // Load collection function
-  const loadCollection = useCallback(async () => {
-    try {
-      const albums = await getCollection();
-      setCollection(albums);
-      setFilteredResults(albums);
-    } catch (error) {
-      console.error("Failed to load collection:", error);
-      setCollection([]);
-      setFilteredResults([]);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // Use centralized color values
+  const { bgGradient, headingColor, textColor } = useAppColors();
 
-  // Load collection on page initialization
-  useEffect(() => {
-    loadCollection();
-  }, [loadCollection]);
+  // Initialize filtered results when collection changes
+  const initializeFilteredResults = useCallback(() => {
+    setFilteredResults(collection);
+  }, [collection]);
 
-  // Filter collection by artist and title
+  // Initialize filtered results when collection loads
+  React.useEffect(() => {
+    initializeFilteredResults();
+  }, [initializeFilteredResults]);
+
+  // Filter collection by artist and title (supports multiple search terms)
   const handleSearch = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const value = event.target.value;
       setSearchValue(value);
 
-      if (value.trim().length === 0) {
-        setFilteredResults(collection);
-      } else {
-        const filtered = collection.filter((album) => {
-          const searchTerm = value.toLowerCase();
-          return (
-            album.artist.toLowerCase().includes(searchTerm) ||
-            album.title.toLowerCase().includes(searchTerm)
-          );
-        });
-        setFilteredResults(filtered);
-      }
+      const filtered = filterAlbumsMultiTerm(collection, value);
+      setFilteredResults(filtered);
     },
     [collection]
   );
@@ -162,6 +135,9 @@ export default function CollectionPage() {
               variants={itemVariants}
             />
 
+            {/* Analytics Section */}
+            <CollectionAnalytics collection={collection} loading={loading} />
+
             {/* Controls Section */}
             <SearchInput
               searchValue={searchValue}
@@ -180,7 +156,7 @@ export default function CollectionPage() {
                 loading={false}
                 results={[]}
                 hasSearched={true}
-                onCollectionUpdate={loadCollection}
+                onCollectionUpdate={refreshCollection}
                 variants={itemVariants}
                 emptyStateIcon="🎵"
                 emptyStateTitle="Your collection is empty"
@@ -198,7 +174,7 @@ export default function CollectionPage() {
                 results={filteredResults}
                 searchQuery={searchValue.trim() ? searchValue : undefined}
                 hasSearched={true}
-                onCollectionUpdate={loadCollection}
+                onCollectionUpdate={refreshCollection}
                 onClearResults={searchValue.trim() ? clearSearch : undefined}
                 variants={itemVariants}
                 loadingText="Loading your collection..."

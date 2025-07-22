@@ -1,6 +1,8 @@
 import { Box, VStack, HStack, Text, Divider, Badge } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
 import { CommunityReview } from "@/types/CommunityReview";
+import { formatReviewDate } from "@/utils/dateUtils";
+import { getRatingColor, getStarConfiguration } from "@/utils/ratingUtils";
 
 interface ReviewSectionProps {
   reviews: CommunityReview[];
@@ -15,29 +17,25 @@ export const ReviewSection = ({
   communityRating,
 }: ReviewSectionProps) => {
   const renderStars = (rating: number) => {
+    const starConfig = getStarConfiguration(rating);
+
     return (
       <HStack spacing={1}>
-        {[1, 2, 3, 4, 5].map((star) => (
+        {starConfig.map((starType, index) => (
           <FaStar
-            key={star}
+            key={index}
             size={16}
-            color={star <= rating ? "#ECC94B" : "#E2E8F0"}
+            color={
+              starType === "filled"
+                ? getRatingColor(rating)
+                : starType === "half"
+                ? getRatingColor(rating)
+                : "#E2E8F0"
+            }
           />
         ))}
       </HStack>
     );
-  };
-
-  const formatDate = (dateString: string) => {
-    try {
-      return new Date(dateString).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      });
-    } catch {
-      return dateString;
-    }
   };
 
   return (
@@ -114,7 +112,7 @@ export const ReviewSection = ({
                         )}
                       </HStack>
                       <Text fontSize="xs" color="gray.500">
-                        {formatDate(review.date)}
+                        {formatReviewDate(review.date)}
                       </Text>
                     </HStack>
 

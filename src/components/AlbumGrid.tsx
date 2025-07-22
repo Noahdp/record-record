@@ -1,8 +1,8 @@
 import { SimpleGrid } from "@chakra-ui/react";
 import { AlbumCard } from "./AlbumCard";
 import { Album } from "@/types/Album";
-import { useState, useEffect, useCallback } from "react";
-import { isInCollection } from "@/lib/db/collection";
+import { useAlbumDetails } from "@/hooks/useAlbumDetails";
+import { useCollectionStatus } from "@/hooks/useCollectionStatus";
 import {
   Modal,
   ModalOverlay,
@@ -14,8 +14,11 @@ import {
   Flex,
 } from "@chakra-ui/react";
 import { AlbumDetailCard } from "./AlbumDetailCard";
-import { AlbumDetail } from "@/types/AlbumDetail";
 import { Text } from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import { modalEntrance } from "@/utils/animationUtils";
+
+const MotionModalContent = motion(ModalContent);
 
 interface AlbumGridProps {
   albums: Album[];
@@ -30,68 +33,38 @@ export const AlbumGrid = ({
   showDeleteButton = false,
   showInCollectionBadge = true,
 }: AlbumGridProps) => {
-  const [collectionIds, setCollectionIds] = useState<Set<string>>(new Set());
-  const [selectedAlbumId, setSelectedAlbumId] = useState<number | null>(null);
-  const [albumDetail, setAlbumDetail] = useState<AlbumDetail | null>(null);
-  const [loadingDetail, setLoadingDetail] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const fetchCollectionStatus = useCallback(async () => {
-    const statuses = await Promise.all(
-      albums.map((album) => isInCollection(album.id))
-    );
-    const ids = new Set(
-      albums
-        .filter((_, index) => statuses[index])
-        .map((album) => album.id.toString())
-    );
-    setCollectionIds(ids);
-  }, [albums]);
+  // Use album details hook
+  const {
+    selectedAlbumId,
+    albumDetail,
+    loadingDetail,
+    fetchAlbumDetails,
+    clearAlbumDetails,
+  } = useAlbumDetails();
 
-  const handleCollectionUpdate = useCallback(() => {
-    fetchCollectionStatus();
+  // Use collection status hook
+  const { collectionIds, refreshCollectionStatus } =
+    useCollectionStatus(albums);
+
+  // Modal entrance animation variants
+  const modalVariants = modalEntrance(0);
+
+  const handleCollectionUpdate = () => {
+    refreshCollectionStatus();
     onCollectionUpdate?.();
-  }, [fetchCollectionStatus, onCollectionUpdate]);
+  };
 
   const handleShowDetails = async (albumId: number) => {
-    setSelectedAlbumId(albumId);
-    setAlbumDetail(null); // Clear previous album data
-    setLoadingDetail(true);
     onOpen();
-    try {
-      // Fetch album details and reviews in parallel
-      const [albumRes, reviewsRes] = await Promise.all([
-        fetch(`/api/discogs/${albumId}`),
-        fetch(`/api/discogs/${albumId}/reviews`),
-      ]);
-
-      const albumData = await albumRes.json();
-      const reviewsData = await reviewsRes.json();
-
-      // Combine album data with reviews
-      const albumWithReviews = {
-        ...albumData,
-        reviews: reviewsData,
-      };
-
-      setAlbumDetail(albumWithReviews);
-    } catch (error) {
-      console.error("Error fetching album details:", error);
-      setAlbumDetail(null);
-    } finally {
-      setLoadingDetail(false);
-    }
+    await fetchAlbumDetails(albumId);
   };
 
   const handleCloseModal = () => {
     onClose();
-    setAlbumDetail(null);
-    setSelectedAlbumId(null);
+    clearAlbumDetails();
   };
-
-  useEffect(() => {
-    fetchCollectionStatus();
-  }, [fetchCollectionStatus]);
 
   return (
     <>
@@ -116,13 +89,17 @@ export const AlbumGrid = ({
       </SimpleGrid>
       <Modal isOpen={isOpen} onClose={handleCloseModal} isCentered>
         <ModalOverlay />
-        <ModalContent
+        <MotionModalContent
           maxW="1200px"
           h="85vh"
           mx={4}
           bg="white"
           display="flex"
           flexDirection="column"
+          variants={modalVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
         >
           <ModalCloseButton zIndex={10} top={4} right={4} size="md" />
           <ModalBody p={8} pt={12} overflowY="auto" flex="1">
@@ -142,7 +119,7 @@ export const AlbumGrid = ({
               <Text>Failed to load album details.</Text>
             )}
           </ModalBody>
-        </ModalContent>
+        </MotionModalContent>
       </Modal>
     </>
   );
