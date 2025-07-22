@@ -1,25 +1,32 @@
-# Record Record
+# Record Record 🎵
 
-A modern web application for managing your vinyl record collection, built with Next.js and integrated with the Discogs API. Mainly built as a learning excercise both to get more React experience and see what its like working with an AI agent for boilerplate code and config.
+[![Next.js](https://img.shields.io/badge/Next.js-15.3.2-black)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0.0-blue)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+[![Chakra UI](https://img.shields.io/badge/Chakra%20UI-2.8.2-teal)](https://chakra-ui.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Features
+A modern, responsive web application for managing your vinyl record collection. Built with Next.js 15 and integrated with the Discogs API, Record Record provides a beautiful interface to search, discover, and organize your music collection.
 
-- 🔍 Search for albums using the comprehensive Discogs database
-- 📀 Add albums to your personal collection
-- 📝 View detailed album information including tracklists, credits, and reviews
-- 📱 Responsive design with Chakra UI
-- 🎨 Modern, clean interface with smooth animations
+> **Note**: This project was developed as a learning exercise to explore modern React development and AI-assisted coding workflows.
 
-## Screenshots
+## ✨ Features
 
-![Home Page](https://via.placeholder.com/800x400?text=Add+your+screenshots+here)
+- 🔍 **Comprehensive Search**: Search through Discogs' vast database of music releases
+- 📀 **Collection Management**: Add and remove albums from your personal collection
+- � **Collection Analytics**: View statistics and insights about your collection
+- 📝 **Detailed Album Info**: Access tracklists, credits, reviews, and community ratings
+- 🎨 **Modern UI**: Clean, responsive design with smooth animations
+- 📱 **Mobile Friendly**: Fully responsive across all device sizes
+- ⚡ **Fast Performance**: Optimized with Next.js 15 App Router and React 19
+- 🔒 **Secure**: Environment-based configuration with proper API key handling
 
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 18+ and npm
-- Discogs API credentials (consumer key and secret)
+- **Node.js** 18+ and npm
+- **Discogs API credentials** (free - see [setup guide](#getting-discogs-api-credentials))
 
 ### Installation
 
@@ -39,10 +46,15 @@ A modern web application for managing your vinyl record collection, built with N
 3. **Set up environment variables:**
 
    ```bash
-   cp .env.example .env
+   cp .env.example .env.local
    ```
 
-   Edit `.env` and add your Discogs API credentials (see below for how to get them).
+   Edit `.env.local` and add your Discogs API credentials:
+
+   ```env
+   DISCOGS_CONSUMER_KEY=your_consumer_key_here
+   DISCOGS_CONSUMER_SECRET=your_consumer_secret_here
+   ```
 
 4. **Set up the database:**
 
@@ -51,97 +63,252 @@ A modern web application for managing your vinyl record collection, built with N
    npx prisma db push
    ```
 
-5. **Run the development server:**
+5. **Start the development server:**
 
    ```bash
    npm run dev
    ```
 
 6. **Open your browser:**
-   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+   Navigate to [http://localhost:3000](http://localhost:3000)
 
 ### Getting Discogs API Credentials
 
-1. Visit the [Discogs Developer Portal](https://www.discogs.com/developers/)
-2. Create a new application
-3. Copy your Consumer Key and Consumer Secret to your `.env` file
+1. **Create a Discogs account** at [discogs.com](https://www.discogs.com)
+2. **Go to Developer Settings**: [discogs.com/settings/developers](https://www.discogs.com/settings/developers)
+3. **Create a new application:**
+   - Name: "Record Record" (or your preferred name)
+   - Description: "Personal vinyl collection manager"
+   - Website: Your deployment URL (or localhost for development)
+4. **Copy your credentials** to `.env.local`
 
-## Tech Stack
+> **Note**: Discogs API is free for personal use with generous rate limits.
 
-- **Frontend**: Next.js 15, React 19, TypeScript
-- **UI Library**: Chakra UI with Framer Motion animations
-- **Database**: SQLite with Prisma ORM
-- **API Integration**: Discogs API for music data
-- **Styling**: Tailwind CSS + Chakra UI
-- **Development**: ESLint, TypeScript, Hot Reload
+## 🛠️ Tech Stack
 
-## Project Structure
+- **Framework**: [Next.js 15.3.2](https://nextjs.org/) with App Router
+- **Frontend**: [React 19.0.0](https://reactjs.org/) with TypeScript 5
+- **UI Library**: [Chakra UI 2.8.2](https://chakra-ui.com/) with [Framer Motion 12.12.1](https://www.framer.com/motion/)
+- **Database**: SQLite with [Prisma 6.8.2](https://prisma.io/) ORM
+- **API Integration**: [Discogs API](https://www.discogs.com/developers/) via [disconnect 1.2.2](https://github.com/bartve/disconnect)
+- **Styling**: Tailwind CSS 3.3.2 + Chakra UI theming
+- **Development**: ESLint 9, TypeScript, Hot Reload
+
+## 📁 Project Structure
 
 ```
-src/
-├── app/                    # Next.js App Router pages
-│   ├── api/               # API routes
-│   ├── collection/        # Collection management pages
-│   └── ...
-├── components/            # Reusable React components
-│   ├── AlbumCard.tsx     # Individual album display
-│   ├── AlbumGrid.tsx     # Grid layout for albums
-│   └── ...
-├── lib/                  # Utility libraries
-│   └── db/              # Database operations
-├── types/               # TypeScript type definitions
-└── hooks/              # Custom React hooks
+record-record/
+├── src/
+│   ├── app/                    # Next.js 15 App Router
+│   │   ├── api/               # API routes (Discogs & Collection)
+│   │   ├── collection/        # Collection management pages
+│   │   ├── globals.css        # Global styles
+│   │   ├── layout.tsx         # Root layout
+│   │   └── page.tsx           # Home page
+│   ├── components/            # Reusable React components
+│   │   ├── AlbumCard.tsx     # Album display cards
+│   │   ├── AlbumGrid.tsx     # Grid layouts
+│   │   ├── NavBar.tsx        # Navigation
+│   │   ├── SearchInput.tsx   # Search functionality
+│   │   └── ...               # 20+ components
+│   ├── hooks/                # Custom React hooks
+│   │   ├── useSearch.ts      # Search functionality
+│   │   ├── useCollection.ts  # Collection management
+│   │   └── ...               # 7 specialized hooks
+│   ├── lib/                  # Utility libraries
+│   │   ├── api/              # API client functions
+│   │   ├── config/           # Environment configuration
+│   │   ├── db/               # Database connection
+│   │   └── errors/           # Error handling
+│   ├── types/                # TypeScript definitions
+│   │   ├── Album.ts          # Core album types
+│   │   ├── AlbumDetail.ts    # Detailed album info
+│   │   └── ...               # 7 type files
+│   └── utils/                # Helper functions
+│       ├── animationUtils.ts # Framer Motion configs
+│       ├── ratingUtils.ts    # Rating calculations
+│       └── ...               # 5 utility files
+├── prisma/
+│   ├── schema.prisma         # Database schema
+│   └── migrations/           # Database migrations
+├── public/                   # Static assets
+├── .env.example             # Environment template
+├── next.config.ts           # Next.js configuration
+├── tailwind.config.ts       # Tailwind configuration
+└── tsconfig.json            # TypeScript configuration
 ```
 
-## API Endpoints
+## 🔌 API Endpoints
 
-- `GET /api/discogs/search?q={query}` - Search for albums
+### Discogs Integration
+
+- `GET /api/discogs/search?q={query}` - Search albums in Discogs database
 - `GET /api/discogs/{id}` - Get detailed album information
-- `GET /api/collection/all` - Get user's collection
-- `POST/DELETE /api/collection/{id}` - Add/remove from collection
+- `GET /api/discogs/{id}/reviews` - Get community reviews and ratings
 
-## Contributing
+### Collection Management
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+- `GET /api/collection/all` - Retrieve user's complete collection
+- `GET /api/collection/{id}` - Check if album is in collection
+- `POST /api/collection/all` - Add album to collection
+- `DELETE /api/collection/{id}` - Remove album from collection
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+## 🎨 Key Components
 
-### Development Guidelines
+### Core Components
 
-- Follow the existing code style and TypeScript conventions
-- Add types for all new functions and components
-- Test your changes thoroughly
-- Update documentation as needed
+- **`AlbumCard`**: Interactive album display with collection management
+- **`AlbumDetailCard`**: Comprehensive album information view
+- **`SearchInput`**: Debounced search with loading states
+- **`ResultsDisplay`**: Responsive grid layout for search results
+- **`CollectionStats`**: Analytics and collection insights
 
-## Deployment
+### Specialized Components
 
-This project can be easily deployed on Vercel:
+- **`ReviewSection`**: Community ratings and individual reviews
+- **`Tracklist`**: Formatted track listings with credits
+- **`Credits`**: Artist and production credit display
+- **`VinylSpinner`**: Custom loading animation
+- **`OptimizedImage`**: Responsive image component with loading states
+
+## 🚀 Deployment
+
+### Vercel (Recommended)
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Noahdp/record-record)
 
-Make sure to add your environment variables in the Vercel dashboard.
+1. **Connect your GitHub repository** to Vercel
+2. **Add environment variables** in Vercel dashboard:
+   - `DISCOGS_CONSUMER_KEY`
+   - `DISCOGS_CONSUMER_SECRET`
+   - `DATABASE_URL` (optional - defaults to SQLite)
+3. **Deploy automatically** on git push
 
-## License
+### Manual Deployment
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+1. **Build the application:**
 
-## Acknowledgments
+   ```bash
+   npm run build
+   ```
 
-- [Discogs](https://www.discogs.com/) for providing the comprehensive music database API
-- [Next.js](https://nextjs.org/) for the amazing React framework
-- [Chakra UI](https://chakra-ui.com/) for the component library
-- [Prisma](https://prisma.io/) for the database toolkit
+2. **Start production server:**
+   ```bash
+   npm run start
+   ```
 
-## Support
+### Environment Variables
 
-If you like this project, please give it a ⭐ on GitHub!
+Required for production:
 
-## Deploy on Vercel
+```env
+DISCOGS_CONSUMER_KEY=your_consumer_key
+DISCOGS_CONSUMER_SECRET=your_consumer_secret
+DATABASE_URL=your_database_url  # Optional: defaults to SQLite
+NODE_ENV=production
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Development Setup
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Fork the repository** on GitHub
+2. **Clone your fork:**
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/record-record.git
+   cd record-record
+   ```
+3. **Follow installation steps** above
+4. **Create a feature branch:**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+### Development Guidelines
+
+- **Code Style**: Follow existing TypeScript and React conventions
+- **Components**: Use Chakra UI components and maintain responsive design
+- **Types**: Add TypeScript types for all new functions and components
+- **Testing**: Test changes thoroughly across different screen sizes
+- **Documentation**: Update README and code comments for significant changes
+
+### Submitting Changes
+
+1. **Commit your changes:**
+   ```bash
+   git commit -m "feat: add your feature description"
+   ```
+2. **Push to your fork:**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+3. **Create a Pull Request** with a clear description of changes
+
+### Development Commands
+
+```bash
+npm run dev        # Start development server
+npm run build      # Build for production
+npm run start      # Start production server
+npm run lint       # Run ESLint
+npx prisma studio  # Open database browser
+npx prisma generate # Regenerate Prisma client
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+| Variable                  | Required | Description                 | Default                |
+| ------------------------- | -------- | --------------------------- | ---------------------- |
+| `DISCOGS_CONSUMER_KEY`    | Yes      | Discogs API consumer key    | -                      |
+| `DISCOGS_CONSUMER_SECRET` | Yes      | Discogs API consumer secret | -                      |
+| `DATABASE_URL`            | No       | Database connection string  | `file:./prisma/dev.db` |
+| `NODE_ENV`                | No       | Environment mode            | `development`          |
+
+### Customization
+
+#### Database
+
+Switch from SQLite to PostgreSQL by updating `prisma/schema.prisma`:
+
+```prisma
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+```
+
+## 📝 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **[Discogs](https://www.discogs.com/)** - Comprehensive music database and API
+- **[Next.js Team](https://nextjs.org/)** - Amazing React framework and developer experience
+- **[Chakra UI](https://chakra-ui.com/)** - Beautiful, accessible component library
+- **[Prisma](https://prisma.io/)** - Type-safe database toolkit
+- **[Vercel](https://vercel.com/)** - Seamless deployment platform
+
+## 💬 Support
+
+- **🐛 Bug Reports**: [Open an issue](https://github.com/Noahdp/record-record/issues)
+- **💡 Feature Requests**: [Start a discussion](https://github.com/Noahdp/record-record/discussions)
+- **⭐ Show Support**: Give this project a star if you find it useful!
+
+## 📊 Project Stats
+
+- **Components**: 22 reusable React components
+- **Hooks**: 7 custom hooks for state management
+- **Type Definitions**: 7 TypeScript interfaces and types
+- **API Routes**: 6 Next.js API endpoints
+- **Database Tables**: Album collection with Prisma ORM
+
+---
+
+<div align="center">
+
+**Built using Next.js 15, React 19, and TypeScript**
+
+[⭐ Star this repo](https://github.com/Noahdp/record-record) • [🐛 Report Bug](https://github.com/Noahdp/record-record/issues) • [💡 Request Feature](https://github.com/Noahdp/record-record/discussions)
+
+</div>

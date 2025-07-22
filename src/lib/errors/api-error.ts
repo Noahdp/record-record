@@ -3,16 +3,16 @@ export class APIError extends Error {
 
   constructor(message: string, statusCode?: number) {
     super(message);
-    this.name = 'APIError';
+    this.name = "APIError";
     this.statusCode = statusCode;
   }
 
   static invalidURL() {
-    return new APIError('Invalid URL');
+    return new APIError("Invalid URL");
   }
 
   static invalidResponse() {
-    return new APIError('Invalid response from server');
+    return new APIError("Invalid response from server");
   }
 
   static decodingError(message: string) {

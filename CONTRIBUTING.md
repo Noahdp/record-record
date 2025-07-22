@@ -1,23 +1,48 @@
 # Contributing to Record Record
 
-Thank you for your interest in contributing to Record Record! This document provides guidelines and information for contributors.
+This document provides guidelines and information for contributors to help ensure a smooth and productive contribution process.
 
-## Getting Started
+## Code of Conduct
 
-1. Fork the repository on GitHub
-2. Clone your fork locally
-3. Create a new branch for your feature or bug fix
-4. Make your changes
-5. Test your changes thoroughly
-6. Submit a pull request
+This project and everyone participating in it is governed by our commitment to creating a welcoming and inclusive environment. Please be respectful and considerate in all interactions.
+
+## How Can I Contribute?
+
+### 🐛 Reporting Bugs
+
+Before creating bug reports, please check the existing issues. When creating a bug report, include:
+
+- **Clear and descriptive title**
+- **Exact steps to reproduce the problem**
+- **Expected vs actual behavior**
+- **Screenshots or GIFs if applicable**
+- **Environment details (OS, browser, Node.js version)**
+
+### 💡 Suggesting Enhancements
+
+Enhancement suggestions are tracked as GitHub issues. Please include:
+
+- **Clear and descriptive title**
+- **Step-by-step description of the suggested enhancement**
+- **Current behavior and why it doesn't meet your needs**
+- **Why this enhancement would be useful to other users**
+
+### 🔧 Pull Requests
+
+1. **Fork the repository** and create your branch from `main`
+2. **Follow the development setup** outlined below
+3. **Make your changes** following our coding standards
+4. **Test your changes** thoroughly
+5. **Update documentation** if needed
+6. **Create a pull request** with a clear title and description
 
 ## Development Setup
 
-1. **Prerequisites:**
+### Prerequisites
 
-   - Node.js 18+
-   - npm or yarn
-   - Git
+- Node.js 18+ and npm
+- Git
+- Discogs API credentials (for testing API integration)
 
 2. **Installation:**
    ```bash
@@ -117,5 +142,3 @@ If you have questions about contributing, feel free to:
 - Open an issue with the "question" label
 - Start a discussion in the GitHub Discussions tab
 - Reach out to the maintainers
-
-Thank you for contributing to Record Record! 🎵

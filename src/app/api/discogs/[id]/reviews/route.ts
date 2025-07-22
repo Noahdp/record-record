@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-import { APIError } from "@/server/api-error";
+import { APIError } from "@/lib/errors/api-error";
 import { CommunityReview } from "@/types/CommunityReview";
 import { DiscogsReviewResponse } from "@/types/DiscogsReviewResponse";
+import { getDiscogsCredentials } from "@/lib/config/environment";
 
 export async function GET(
   request: Request,
@@ -15,12 +16,17 @@ export async function GET(
   }
 
   try {
+    // Get validated Discogs credentials
+    const credentials = getDiscogsCredentials();
+
     // Make direct API call to Discogs reviews endpoint
-    const reviewsUrl = `https://api.discogs.com/releases/${albumId}/reviews?key=${process.env.DISCOGS_CONSUMER_KEY}&secret=${process.env.DISCOGS_CONSUMER_SECRET}`;
+    // Security: Use Authorization header instead of exposing keys in URL
+    const reviewsUrl = `https://api.discogs.com/releases/${albumId}/reviews`;
 
     const response = await fetch(reviewsUrl, {
       headers: {
         "User-Agent": "Record Record/1.0",
+        Authorization: `Discogs key=${credentials.consumerKey}, secret=${credentials.consumerSecret}`,
       },
     });
 

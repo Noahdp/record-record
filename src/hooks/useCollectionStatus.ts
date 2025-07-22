@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { Album } from "@/types/Album";
-import { isInCollection } from "@/lib/db/collection";
+import { isInCollection } from "@/lib/api/collection";
 
 interface UseCollectionStatusReturn {
   collectionIds: Set<string>;

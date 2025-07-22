@@ -32,6 +32,15 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# secrets and sensitive files
+secrets/
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
 
 # vercel
 .vercel
@@ -44,6 +53,3 @@ next-env.d.ts
 src/generated/
 *.db
 *.db-journal
-
-# local development files
-conversion-notes.md

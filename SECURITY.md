@@ -10,24 +10,33 @@ We currently support the following versions with security updates:
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in Record Record, please report it privately by:
+If you discover a security vulnerability in Record Record, please report it responsibly:
 
-1. **Email**: Send details to [your-security-email@example.com] (replace with actual email)
-2. **GitHub**: Use the private vulnerability reporting feature on GitHub
+### Preferred Method: GitHub Security Advisories
 
-Please include:
+1. Go to the [Security tab](https://github.com/Noahdp/record-record/security) of this repository
+2. Click "Report a vulnerability"
+3. Fill out the private vulnerability report form
 
-- A description of the vulnerability
-- Steps to reproduce the issue
-- Potential impact assessment
-- Any suggested fixes (if available)
+### Alternative Method: GitHub Issues
 
-## What to Expect
+For non-sensitive security issues, you can [create a public issue](https://github.com/Noahdp/record-record/issues) with the "security" label.
 
-- **Acknowledgment**: We will acknowledge receipt of your report within 48 hours
-- **Investigation**: We will investigate and validate the reported vulnerability
-- **Timeline**: We aim to provide an initial response within 7 days
-- **Resolution**: We will work to resolve critical vulnerabilities as quickly as possible
+### What to Include
+
+Please include the following information in your report:
+
+- **Description**: Clear description of the vulnerability
+- **Steps to Reproduce**: Detailed steps to reproduce the issue
+- **Impact Assessment**: Potential impact and affected components
+- **Environment**: Browser, OS, Node.js version, etc.
+- **Suggested Fix**: Any potential solutions (if you have them)
+
+## Response Timeline
+
+- **Acknowledgment**: We will acknowledge receipt within 48 hours
+- **Initial Assessment**: Initial response within 7 days
+- **Resolution**: Critical vulnerabilities will be prioritized for immediate fixes
 
 ## Security Best Practices
 
@@ -37,11 +46,3 @@ When using Record Record:
 2. **Dependencies**: Keep dependencies updated using `npm audit`
 3. **HTTPS**: Always use HTTPS in production environments
 4. **API Rate Limits**: Respect Discogs API rate limits to avoid service disruption
-
-## Disclosure Policy
-
-- We follow responsible disclosure principles
-- We will credit security researchers who report vulnerabilities (unless they prefer to remain anonymous)
-- We will coordinate with you on the disclosure timeline
-
-Thank you for helping keep Record Record secure!

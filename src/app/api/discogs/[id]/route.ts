@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
-import { DiscogsAPI } from "@/server/discogs-api";
-import { APIError } from "@/server/api-error";
+import { DiscogsAPI } from "@/lib/api/discogs";
+import { APIError } from "@/lib/errors/api-error";
+import { getDiscogsCredentials } from "@/lib/config/environment";
 
-const discogsAPI = new DiscogsAPI(
-  process.env.DISCOGS_CONSUMER_KEY || "",
-  process.env.DISCOGS_CONSUMER_SECRET || ""
-);
+const getDiscogsAPI = () => {
+  const credentials = getDiscogsCredentials();
+  return new DiscogsAPI(credentials.consumerKey, credentials.consumerSecret);
+};
 
 export async function GET(
   request: Request,
@@ -19,9 +20,11 @@ export async function GET(
   }
 
   try {
+    const discogsAPI = getDiscogsAPI();
     const albumDetails = await discogsAPI.getBestAlbumDetails(id);
     return NextResponse.json(albumDetails);
   } catch (error) {
+    console.error("Album Details API Error:", error);
     if (error instanceof APIError) {
       return NextResponse.json(
         { error: error.message },

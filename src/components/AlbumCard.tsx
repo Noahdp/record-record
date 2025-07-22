@@ -14,7 +14,7 @@ import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { FaThList } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { Album } from "@/types/Album";
-import { addToCollection, removeFromCollection } from "@/lib/db/collection";
+import { addToCollection, removeFromCollection } from "@/lib/api/collection";
 import { OptimizedImage } from "./OptimizedImage";
 import { memo } from "react";
 import { cardHover } from "@/utils/animationUtils";

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Album } from "@/types/Album";
-import { getCollection } from "@/lib/db/collection";
+import { getCollection } from "@/lib/api/collection";
 
 interface UseCollectionReturn {
   collection: Album[];

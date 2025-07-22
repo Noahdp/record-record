@@ -1,7 +1,7 @@
 import { Client } from "disconnect";
-import { Album } from "../types/Album";
-import { AlbumDetail } from "../types/AlbumDetail";
-import { APIError } from "./api-error";
+import { Album } from "@/types/Album";
+import { AlbumDetail } from "@/types/AlbumDetail";
+import { APIError } from "../errors/api-error";
 import type {
   SearchResponse,
   DiscogsDatabase,
