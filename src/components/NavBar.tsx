@@ -18,6 +18,18 @@ import { FcMusic } from "react-icons/fc";
 import { FaRecordVinyl } from "react-icons/fa";
 import { useRouter, usePathname } from "next/navigation";
 import { useAppColors } from "@/hooks/useAppColors";
+import dynamic from "next/dynamic";
+
+// Dynamically import ColorModeToggle to avoid SSR issues
+const ColorModeToggle = dynamic(
+  () =>
+    import("@/components/ColorModeToggle").then((mod) => ({
+      default: mod.ColorModeToggle,
+    })),
+  {
+    ssr: false,
+  }
+);
 
 const MotionBox = motion(Box);
 
@@ -135,17 +147,21 @@ export const NavBar = () => {
                   isActive={pathname === item.href}
                 />
               ))}
+              <ColorModeToggle />
             </HStack>
 
-            {/* Mobile menu button */}
-            <IconButton
-              size="md"
-              icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-              aria-label="Toggle NavBar"
-              display={{ base: "flex", md: "none" }}
-              onClick={onToggle}
-              variant="ghost"
-            />
+            {/* Mobile controls */}
+            <HStack spacing={2} display={{ base: "flex", md: "none" }}>
+              <ColorModeToggle />
+              {/* Mobile menu button */}
+              <IconButton
+                size="md"
+                icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+                aria-label="Toggle NavBar"
+                onClick={onToggle}
+                variant="ghost"
+              />
+            </HStack>
           </Flex>
 
           {/* Mobile Navigation */}

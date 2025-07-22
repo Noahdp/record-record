@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { SearchInput } from "@/components/SearchInput";
 import { ResultsDisplay } from "@/components/ResultsDisplay";
 import { useSearch } from "@/hooks/useSearch";
+import { useAppColors } from "@/hooks/useAppColors";
 import {
   pageTransition,
   fadeInScale,
@@ -38,6 +39,9 @@ export default function HomePage() {
     clearResults,
   } = useSearch();
 
+  // Use centralized color values
+  const { headingColor, textColor, bgGradient } = useAppColors();
+
   // Animation variants
   const containerVariants = staggerChildren(0.1, 0.8);
   const searchBoxVariants = fadeInScale(0.4, 0.4);
@@ -53,16 +57,20 @@ export default function HomePage() {
     >
       <NavBar />
 
-      <Container maxW="container.xl" p={0}>
-        {/* Hero Section */}
-        <MotionBox
-          initial="hidden"
-          animate="visible"
-          variants={containerVariants}
-        >
-          <VStack spacing={8} align="center" justify="center" minH="60vh" p={8}>
+      <Box
+        minH="100vh"
+        bgGradient={bgGradient}
+      >
+        <Container maxW="container.xl" py={[8, 16]}>
+          {/* Hero Section */}
+          <MotionBox
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+          >
+            <VStack spacing={8} align="center" justify="center" minH="60vh" p={8}>
             <motion.div variants={containerVariants}>
-              <Heading as="h1" size="2xl" textAlign="center" color="gray.800">
+              <Heading as="h1" size="2xl" textAlign="center" color={headingColor}>
                 Welcome to Record Record
               </Heading>
             </motion.div>
@@ -70,7 +78,7 @@ export default function HomePage() {
             <motion.div variants={containerVariants}>
               <Text
                 fontSize="xl"
-                color="gray.600"
+                color={textColor}
                 textAlign="center"
                 maxW="600px"
               >
@@ -125,7 +133,8 @@ export default function HomePage() {
             </Container>
           </Box>
         )}
-      </Container>
+        </Container>
+      </Box>
     </motion.div>
   );
 }

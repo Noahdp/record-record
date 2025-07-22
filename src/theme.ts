@@ -138,6 +138,10 @@ const theme = extendTheme({
       },
     },
   },
+  config: {
+    initialColorMode: "light",
+    useSystemColorMode: true,
+  },
   styles: {
     global: {
       body: {
