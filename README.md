@@ -26,7 +26,7 @@ A modern, responsive web application for managing your vinyl record collection. 
 ### Home Page & Search
 
 ![Home Page](./screenshots/home-page.png)
-_Search through Discogs' vast database with a clean, modern interface_
+_Search through Discogs vast database with a clean interface_
 
 ### Search Results
 
