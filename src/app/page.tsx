@@ -69,7 +69,7 @@ export default function HomePage() {
               spacing={8}
               align="center"
               justify="center"
-              minH="60vh"
+              minH={hasSearched ? "auto" : "60vh"}
               p={8}
             >
               <motion.div variants={containerVariants}>
@@ -122,23 +122,21 @@ export default function HomePage() {
 
           {/* Search Results Section */}
           {hasSearched && (
-            <Box py={16}>
-              <Container maxW="container.xl">
-                <ResultsDisplay
-                  loading={isSearching}
-                  results={searchResults}
-                  searchQuery={lastSearchedQuery}
-                  hasSearched={hasSearched}
-                  onCollectionUpdate={() => {
-                    console.log("Collection updated from search results");
-                  }}
-                  onClearResults={clearResults}
-                  showDeleteButton={false}
-                  showInCollectionBadge={true}
-                  loadingText="Searching..."
-                  emptyStateDescription="Try searching with different keywords or check your spelling."
-                />
-              </Container>
+            <Box>
+              <ResultsDisplay
+                loading={isSearching}
+                results={searchResults}
+                searchQuery={lastSearchedQuery}
+                hasSearched={hasSearched}
+                onCollectionUpdate={() => {
+                  console.log("Collection updated from search results");
+                }}
+                onClearResults={clearResults}
+                showDeleteButton={false}
+                showInCollectionBadge={true}
+                loadingText="Searching..."
+                emptyStateDescription="Try searching with different keywords or check your spelling."
+              />
             </Box>
           )}
         </Container>

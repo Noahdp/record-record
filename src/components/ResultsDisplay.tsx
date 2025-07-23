@@ -55,7 +55,7 @@ export const ResultsDisplay = React.memo(
     // Loading State
     if (loading) {
       return (
-        <MotionBox variants={variants} textAlign="center" py={10}>
+        <MotionBox variants={variants} textAlign="center" py={4}>
           <VStack spacing={4}>
             <VinylSpinner color="brand.500" size="xl" thickness="3px" />
             <Text color={textColor} fontSize="lg">
@@ -75,7 +75,7 @@ export const ResultsDisplay = React.memo(
           : emptyStateTitle);
 
       return (
-        <MotionBox variants={variants} textAlign="center" py={10}>
+        <MotionBox variants={variants} textAlign="center" py={6}>
           <VStack spacing={6}>
             <Box color="gray.400" fontSize="6xl">
               {emptyStateIcon}

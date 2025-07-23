@@ -21,7 +21,34 @@ A modern, responsive web application for managing your vinyl record collection. 
 - ⚡ **Fast Performance**: Optimized with Next.js 15 App Router and React 19
 - 🔒 **Secure**: Environment-based configuration with proper API key handling
 
-## 🚀 Quick Start
+## � Screenshots
+
+### Home Page & Search
+
+![Home Page](./screenshots/home-page.png)
+_Search through Discogs' vast database with a clean, modern interface_
+
+### Search Results
+
+![Search Results](./screenshots/search-results.png)
+_Browse through search results with album artwork and quick collection management_
+
+### Album Details
+
+![Album Details](./screenshots/album-details.png)
+_Detailed album information including tracklist, credits, and community reviews_
+
+### COllection Stats View
+
+![Collection](./screenshots/collection-stats-view.png)
+_See analytics and insights on your collection_
+
+### Collection View
+
+![Collection](./screenshots/collection-view.png)
+_Manage your personal collection_
+
+## �🚀 Quick Start
 
 ### Prerequisites
 
