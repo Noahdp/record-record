@@ -319,7 +319,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 ## 💬 Support
 
 - **🐛 Bug Reports**: [Open an issue](https://github.com/Noahdp/record-record/issues)
-- **💡 Feature Requests**: [Start a discussion](https://github.com/Noahdp/record-record/discussions)
 - **⭐ Show Support**: Give this project a star if you find it useful!
 
 ## 📊 Project Stats
