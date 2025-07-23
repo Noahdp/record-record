@@ -336,6 +336,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 **Built using Next.js 15, React 19, and TypeScript**
 
-[⭐ Star this repo](https://github.com/Noahdp/record-record) • [🐛 Report Bug](https://github.com/Noahdp/record-record/issues) • [💡 Request Feature](https://github.com/Noahdp/record-record/discussions)
+[⭐ Star this repo](https://github.com/Noahdp/record-record) • [🐛 Report Bug](https://github.com/Noahdp/record-record/issues)
 
 </div>
